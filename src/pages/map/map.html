@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Map</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-fab right bottom (click)="centreMap()" id="centreMap">
+    <button ion-fab>
+      <ion-icon name="pin"></ion-icon>
+    </button>
+  </ion-fab>
+  
+  <div #map id="map"></div>
+
+</ion-content>

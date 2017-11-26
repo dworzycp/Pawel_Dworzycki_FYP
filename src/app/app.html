@@ -1,14 +1,18 @@
 <ion-menu [content]="content">
   <ion-header>
     <ion-toolbar>
-      <ion-title>Menu</ion-title>
+      <img src="./assets/img/img_avatar.png" alt="Avatar" id="avatar"> 
+      <ion-title id="name">Pawel</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <ion-content>
+  <ion-content id="nav-list">
     <ion-list>
       <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
         {{p.title}}
+      </button>
+      <button menuClose ion-item (click)="TODO()">
+        Sign out
       </button>
     </ion-list>
   </ion-content>

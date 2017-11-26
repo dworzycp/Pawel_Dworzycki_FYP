@@ -1,3 +1,66 @@
-page-home {
+span {
+    font-family: 'Open Sans', sans-serif;
+}
 
+#heading-city {
+    font-size: 2em;
+    padding-bottom: 0;
+}
+
+#heading-country {
+    font-size: 1em;
+    padding-bottom: 1em;
+}
+
+#heading-date, #heading-summary, #heading-rain, #heaing-humidity, #heading-wind {
+    font-size: 0.8em;
+    padding-bottom: 0;
+}
+
+#heading-temp {
+    font-weight: 600;
+    font-size: 6em;
+    padding-top: 0.1em;
+    padding-bottom: 0.1em;
+}
+
+#heading-temp-unit {
+    font-size: 0.3em !important;
+    vertical-align: top;
+}
+
+.weather-scroll {
+    overflow: auto;
+    white-space: nowrap;
+    padding-top: 2em;
+
+    .card-forecast {
+        display: inline-block;
+        height: 100%;
+        width: 5.5em;
+        border: #cccccc solid 1px;
+        background-color: #fff;
+        margin-right: 2em;
+    
+        .card-forecast-header {
+            text-align: center;
+            padding-top: 1em;
+            padding-bottom: 0.2em;
+        }
+    
+        .card-forecast-icon {
+            text-align: center;
+            padding: 0;
+        }
+    
+        .card-forecast-temp {
+            text-align: center;
+            padding-top: 0em;
+            padding-bottom: 1em;
+        }
+    
+        .card-forecast-temp-unit {
+            
+        }
+    }
 }

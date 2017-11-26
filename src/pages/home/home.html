@@ -3,16 +3,66 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Home</ion-title>
+    <ion-title>Forecast</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <h3>Ionic Menu Starter</h3>
 
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will show you the way.
-  </p>
+  <ion-grid>
+    <ion-row *ngIf="stateProvider.weather && stateProvider.currentLocation.results">
+      <ion-col col-4>
+        <img height="100" width="100" src="./assets/img/weather-icons/SVG/{{stateProvider.weather.displayIcon}}.svg">
+      </ion-col>
+      <ion-col col-8>
+        <ion-grid>
+          <ion-row>
+            <ion-col col-12 id="heading-city">
+              <span>{{stateProvider.currentLocation.results[0].address_components[2].long_name}}</span>
+            </ion-col>
+            <ion-col col-12 id="heading-country">
+              <span>{{stateProvider.currentLocation.results[0].address_components[6].long_name}}</span>
+            </ion-col>
+            <ion-col col-12 id="heading-date">
+              <span>{{genericProvider.convertUNIXtoUTC(stateProvider.weather.currently.time)}}</span>
+            </ion-col>
+            <ion-col col-12 id="heading-summary">
+              <span>{{stateProvider.weather.currently.summary}}</span>
+            </ion-col>
+            <ion-col col-12 id="heading-temp">
+              <span>{{stateProvider.weather.currently.temperature}}</span>
+              <span id="heading-temp-unit">°C</span>
+            </ion-col>
+            <ion-col col-12 id="heading-rain">
+              <span>Rain Probability: X%</span>
+            </ion-col>
+            <ion-col col-12 id="heaing-humidity">
+              <span>Humidity: {{stateProvider.weather.currently.humidity}}</span>
+            </ion-col>
+            <ion-col col-12 id="heading-wind">
+              <span>Wind: {{stateProvider.weather.currently.windSpeed}} m/s</span>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
-  <button ion-button secondary menuToggle>Toggle Menu</button>
+  <div *ngIf="stateProvider.weather" class="weather-scroll">
+    <div class="card-forecast" *ngFor="let hourForecast of stateProvider.weather.hourly.data">
+      <ion-row>
+        <ion-col col-12 class="card-forecast-header">
+          <span>{{genericProvider.convertUNIXtoUTC(hourForecast.time, true)}}</span>
+        </ion-col>
+        <ion-col col-12 class="card-forecast-icon">
+          <img height="50" width="50" src="./assets/img/weather-icons/SVG/{{hourForecast.displayIcon}}.svg">
+        </ion-col>
+        <ion-col col-12 class="card-forecast-temp">
+          <span>{{hourForecast.temperature}}</span>
+          <span id="card-forecast-temp-unit">°C</span>
+        </ion-col>
+      </ion-row>
+    </div>
+  </div>
+
 </ion-content>
