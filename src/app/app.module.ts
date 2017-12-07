@@ -16,6 +16,7 @@ import { ConstantsProvider } from '../providers/constants/constants';
 import { StateProvider } from '../providers/state/state';
 import { CurrentLocationProvider } from '../providers/current-location/current-location';
 import { GenericProvider } from '../providers/generic/generic';
+import { ErrorHandlerProvider } from '../providers/error-handler/error-handler';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { GenericProvider } from '../providers/generic/generic';
     StateProvider,
     CurrentLocationProvider,
     GenericProvider,
-    Geolocation
+    Geolocation,
+    ErrorHandlerProvider
   ]
 })
 export class AppModule {}

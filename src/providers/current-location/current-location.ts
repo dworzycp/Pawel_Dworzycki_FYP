@@ -3,7 +3,7 @@
  * It also calls Google API to get an address for lat and lon co-ordinates.
  * 
  * @author Pawel Dworzycki
- * @version 26/11/2017
+ * @version 07/12/2017
  */
 
 // Framework
@@ -19,17 +19,25 @@ import { SimpleLocationModel } from '../../models/simple-location-model';
 // Providers
 import { ConstantsProvider } from "../constants/constants";
 import { StateProvider } from "../state/state";
+import { ErrorHandlerProvider } from '../error-handler/error-handler';
 
 @Injectable()
 export class CurrentLocationProvider {
 
-  constructor(
+  page: String = "CurrentLocationProvider";
+
+  constructor (
     public http: HttpClient,
     private constantsProvider: ConstantsProvider,
     private geolocation: Geolocation,
-    private stateProvider: StateProvider) {
+    private stateProvider: StateProvider,
+    private errorHandlerProvider: ErrorHandlerProvider) {
+    try {
       this.watchLocation();
+    } catch (error) {
+      this.errorHandlerProvider.handleError(error.message, this.page, "constructor");
     }
+  }
 
   getCurrentLocation(): Promise<any> {
     return new Promise<any>(resolve => {
@@ -45,7 +53,7 @@ export class CurrentLocationProvider {
 
       // onError Callback receives a PositionError object
       function onError(error) {
-        console.log(error);
+        alert(error);
         resolve();
       }
 

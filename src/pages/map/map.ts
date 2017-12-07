@@ -12,6 +12,7 @@ import { NavController } from 'ionic-angular';
 // Providers
 import { CurrentLocationProvider } from "../../providers/current-location/current-location";
 import { StateProvider } from "../../providers/state/state";
+import { ErrorHandlerProvider } from '../../providers/error-handler/error-handler';
 
 // Google
 declare var google: any;
@@ -23,11 +24,13 @@ declare var google: any;
 export class MapPage {
 
   public map;
+  page: String = "Map";
 
   constructor(
     public navCtrl: NavController,
     private currentLocationProvider: CurrentLocationProvider, 
-    private stateProvider: StateProvider) { }
+    private stateProvider: StateProvider,
+    private errorHandlerProvider: ErrorHandlerProvider) { }
 
   ionViewDidLoad() {
     // Only load the map if it hasn't been loaded
@@ -58,8 +61,7 @@ export class MapPage {
       // Set markers
       this.addLocationMarkers();
     } catch (error) {
-      // TODO error logging
-      alert("map :: loadMap :: " + error);
+      this.errorHandlerProvider.handleError(error.message, this.page, "loadMap");
     }
   }
 
@@ -70,8 +72,7 @@ export class MapPage {
         this.map.panTo(location);
       });
     } catch (error) {
-      // TODO error logging
-      alert("map :: centreMap :: " + error);
+      this.errorHandlerProvider.handleError(error.message, this.page, "centreMap");
     }
   }
 
@@ -82,8 +83,7 @@ export class MapPage {
         this.addMarker(loc);
       });
     } catch (error) {
-      // TODO error logging
-      alert("map :: addLocationMarkers :: " + error);
+      this.errorHandlerProvider.handleError(error.message, this.page, "addLocationMarkers");
     }
   }
 
@@ -95,8 +95,7 @@ export class MapPage {
         position: new google.maps.LatLng(location.lat, location.lng)
       });
     } catch (error) {
-      // TODO error logging
-      alert("map :: addMarker :: " + error);
+      this.errorHandlerProvider.handleError(error.message, this.page, "addMarker");
     }
   }
 

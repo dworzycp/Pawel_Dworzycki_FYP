@@ -2,7 +2,7 @@
  * This page displays the forecast to the user
  * 
  * @author Pawel Dworzycki
- * @version 26/11/2017
+ * @version 07/12/2017
  */
 
 // Framework Imports
@@ -17,19 +17,22 @@ import { WeatherProvider } from '../../providers/weather/weather';
 import { StateProvider } from '../../providers/state/state';
 import { CurrentLocationProvider } from "../../providers/current-location/current-location";
 import { GenericProvider } from "../../providers/generic/generic";
+import { ErrorHandlerProvider } from '../../providers/error-handler/error-handler';
 
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
 export class HomePage {
+  page: String = "Home";
 
   constructor(
     public navCtrl: NavController,
     public stateProvider: StateProvider,
     public genericProvider: GenericProvider,
     private weatherProvider: WeatherProvider,
-    private currentLocationProvider: CurrentLocationProvider) { }
+    private currentLocationProvider: CurrentLocationProvider,
+    private errorHandlerProvider: ErrorHandlerProvider) { }
 
   ngOnInit() {
     this.getCurrentLocation().then(() => {
@@ -43,18 +46,24 @@ export class HomePage {
 
   getWeather() {
     // TODO hardcoded
-    let lat: String = "52.488255";
-    let long: String = "-1.892106";
+    let lat: String = null;
+    let long: String = null;
 
     // Read current location from local storage
     if (localStorage.getItem("latitude")) {
       lat = localStorage.getItem("latitude");
     }
+    else {
+      throw new Error("NO_COORDS");
+    }
     if (localStorage.getItem("longitude")) {
       long = localStorage.getItem("longitude");
     }
+    else {
+      throw new Error("NO_COORDS");
+    }
 
-    if (lat && long) {
+    try {
       // TODO units hardcoded to si
       this.weatherProvider.getWeatherForecast(lat, long, "si").subscribe((weather) => {
         // Save weather
@@ -68,16 +77,14 @@ export class HomePage {
         this.stateProvider.weather.hourly.data.forEach(hour => {
           hour.temperature = parseInt(hour.temperature.toString());
           hour.displayIcon = this.weatherProvider.setWeatherIcon(hour.icon);
-        }); 
+        });
         // Limit forecast to the next 10 hours (can show tomorrow's)
         this.stateProvider.weather.hourly.data.length = 10;
       }, error => {
-        alert("home :: getWeather - sub :: " + error);
+        this.errorHandlerProvider.handleError(error.message, this.page, "getWeather - sub");
       });
-    }
-    else {
-      // TODO error handling
-      alert("home :: getWeather :: no valid co-ords to call weather api");
+    } catch (error) {
+      this.errorHandlerProvider.handleError(error.message, this.page, "getWeather");
     }
   }
 
@@ -87,7 +94,7 @@ export class HomePage {
         this.currentLocationProvider.getReadableLocation(localStorage.getItem("latitude"), localStorage.getItem("longitude")).subscribe((data) => {
           this.stateProvider.currentLocation = (data);
         }, error => {
-          alert("home :: getCurrentLocation :: " + error.toString());
+          this.errorHandlerProvider.handleError(error.message, this.page, "getCurrentLocation");
         });
         resolve();
       })

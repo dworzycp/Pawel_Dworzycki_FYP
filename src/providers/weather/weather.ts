@@ -20,9 +20,11 @@ import { WeatherResponseModel } from '../../models/weather-response-model';
 @Injectable()
 export class WeatherProvider {
 
-  constructor(public http: HttpClient, private constantsProvider: ConstantsProvider) { }
+  constructor(
+    public http: HttpClient,
+    private constantsProvider: ConstantsProvider) { }
 
-  getWeatherForecast(lat: String, long: String, unit: String) : Observable<WeatherResponseModel> {
+  getWeatherForecast(lat: String, long: String, unit: String): Observable<WeatherResponseModel> {
     // TODO for now units are hard coded to oC (si units)
     return this.http.get<WeatherResponseModel>(`${this.constantsProvider.weatherAPIUrl}${this.constantsProvider.weatherAPIKey}/${lat},${long}?units=${unit}`);
   }
