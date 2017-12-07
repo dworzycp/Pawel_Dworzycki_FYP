@@ -1,18 +1,26 @@
 <ion-menu [content]="content">
-  <ion-header>
-    <ion-toolbar>
-      <img src="./assets/img/img_avatar.png" alt="Avatar" id="avatar"> 
-      <ion-title id="name">Pawel</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
+  
   <ion-content id="nav-list">
+
+    <div id="user-holder">
+      <img src="./assets/img/img_avatar.png" alt="Avatar" id="avatar">
+      <ion-title id="name">
+        <span>Pawel</span>
+      </ion-title>
+    </div>
+
     <ion-list>
       <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
-        {{p.title}}
+        <span id="menu-list-item">
+          <ion-icon name="{{p.icon}}" item-start></ion-icon>
+          {{p.title}}
+        </span>
       </button>
       <button menuClose ion-item (click)="TODO()">
-        Sign out
+        <span id="menu-list-item">
+          <ion-icon name="log-out" item-start></ion-icon>
+          Sign out
+        </span>
       </button>
     </ion-list>
   </ion-content>

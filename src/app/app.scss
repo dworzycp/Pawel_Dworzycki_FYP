@@ -15,6 +15,10 @@
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
 
+h1, h2, h3, h4, h5, h6, p, span {
+    font-family: 'Open Sans', sans-serif;
+}
+
 #avatar {
     border-radius: 50%;
     height: 10em;
@@ -25,9 +29,25 @@
 
 #name {
     text-align: center;
-    margin-bottom: 1em;
+    padding-bottom: 1em;
+
+    span {
+        color: white;
+    }
 }
 
 #nav-list {
     padding-top: 1em;
+}
+
+#user-holder {
+    background-color: #29C4D8;
+}
+
+#menu-list-item {
+    color: #6A6A6A;
+}
+
+.header-md::after, .tabs-md[tabsPlacement="top"] > .tabbar::after, .footer-md::before, .tabs-md[tabsPlacement="bottom"] > .tabbar::before {
+    width: 0;
 }
