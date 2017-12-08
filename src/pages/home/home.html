@@ -3,7 +3,12 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Forecast</ion-title>
+    <ion-title>{{page}}</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="backgroundModeProvider.moveAppToBackground()">
+        <ion-icon name="compass"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 

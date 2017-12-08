@@ -10,7 +10,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Geolocation } from '@ionic-native/geolocation';
-import { Observable } from 'rxjs/Observable';
+//import { Observable } from 'rxjs/Observable';
+// TODO needed?
+import { Observable } from 'Rxjs/rx';
+import { Subscription } from "rxjs/Subscription";
 
 // Models
 import { GoogleLocationModel } from "../../models/google-location-model";
@@ -26,7 +29,7 @@ export class CurrentLocationProvider {
 
   page: String = "CurrentLocationProvider";
 
-  constructor (
+  constructor(
     public http: HttpClient,
     private constantsProvider: ConstantsProvider,
     private geolocation: Geolocation,
@@ -42,7 +45,7 @@ export class CurrentLocationProvider {
   getCurrentLocation(): Promise<any> {
     return new Promise<any>(resolve => {
       var onSuccess = function (position) {
-        // TO DO find a better solution
+        // TODO find a better solution
         // For now the lat and long coords are saved in local storage rather than
         // returned due to scope issues
         localStorage.setItem("latitude", position.coords.latitude);
@@ -69,13 +72,18 @@ export class CurrentLocationProvider {
           loc.lat = position.coords.latitude;
           loc.lng = position.coords.longitude;
           // TODO this array needs to also sync with azure
-          this.stateProvider.visitedLocations.push(loc);
+          this.addVisitedLocation(loc);
         }
       });
   }
 
   getReadableLocation(lat: string, long: string): Observable<GoogleLocationModel> {
     return this.http.get<GoogleLocationModel>(`${this.constantsProvider.googleApiUrl}geocode/json?latlng=${lat},${long}&key=${this.constantsProvider.googleApiKey}`);
+  }
+
+  addVisitedLocation(loc: SimpleLocationModel) {
+    // TODO push to azure
+    this.stateProvider.visitedLocations.push(loc);
   }
 
 }

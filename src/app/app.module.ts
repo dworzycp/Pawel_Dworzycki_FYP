@@ -4,6 +4,7 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { HttpClientModule } from '@angular/common/http'; 
 import { HttpModule } from '@angular/http';
 import { Geolocation } from '@ionic-native/geolocation';
+import { BackgroundMode } from '@ionic-native/background-mode';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
@@ -17,6 +18,7 @@ import { StateProvider } from '../providers/state/state';
 import { CurrentLocationProvider } from '../providers/current-location/current-location';
 import { GenericProvider } from '../providers/generic/generic';
 import { ErrorHandlerProvider } from '../providers/error-handler/error-handler';
+import { BackgroundModeProvider } from '../providers/background-mode/background-mode';
 
 @NgModule({
   declarations: [
@@ -45,8 +47,10 @@ import { ErrorHandlerProvider } from '../providers/error-handler/error-handler';
     StateProvider,
     CurrentLocationProvider,
     GenericProvider,
+    BackgroundMode,
     Geolocation,
-    ErrorHandlerProvider
+    ErrorHandlerProvider,
+    BackgroundModeProvider
   ]
 })
 export class AppModule {}

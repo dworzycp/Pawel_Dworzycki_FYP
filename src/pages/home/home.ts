@@ -18,18 +18,20 @@ import { StateProvider } from '../../providers/state/state';
 import { CurrentLocationProvider } from "../../providers/current-location/current-location";
 import { GenericProvider } from "../../providers/generic/generic";
 import { ErrorHandlerProvider } from '../../providers/error-handler/error-handler';
+import { BackgroundModeProvider } from '../../providers/background-mode/background-mode';
 
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
 export class HomePage {
-  page: String = "Home";
+  page: String = "Forecast";
 
   constructor(
     public navCtrl: NavController,
     public stateProvider: StateProvider,
     public genericProvider: GenericProvider,
+    public backgroundModeProvider: BackgroundModeProvider,
     private weatherProvider: WeatherProvider,
     private currentLocationProvider: CurrentLocationProvider,
     private errorHandlerProvider: ErrorHandlerProvider) { }
@@ -47,7 +49,7 @@ export class HomePage {
   getWeather() {
     // TODO hardcoded
     let lat: String = null;
-    let long: String = null;
+    let lng: String = null;
 
     // Read current location from local storage
     if (localStorage.getItem("latitude")) {
@@ -57,7 +59,7 @@ export class HomePage {
       throw new Error("NO_COORDS");
     }
     if (localStorage.getItem("longitude")) {
-      long = localStorage.getItem("longitude");
+      lng = localStorage.getItem("longitude");
     }
     else {
       throw new Error("NO_COORDS");
@@ -65,7 +67,7 @@ export class HomePage {
 
     try {
       // TODO units hardcoded to si
-      this.weatherProvider.getWeatherForecast(lat, long, "si").subscribe((weather) => {
+      this.weatherProvider.getWeatherForecast(lat, lng, "si").subscribe((weather) => {
         // Save weather
         this.stateProvider.weather = new WeatherResponseModel();
         this.stateProvider.weather = (weather);

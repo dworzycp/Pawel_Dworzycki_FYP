@@ -4,6 +4,9 @@ import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
+// Providers
+import { BackgroundModeProvider } from '../providers/background-mode/background-mode';
+
 // Pages
 import { HomePage } from '../pages/home/home';
 import { MapPage } from "../pages/map/map";
@@ -16,9 +19,13 @@ export class MyApp {
 
   rootPage: any = HomePage;
 
-  pages: Array<{title: string, component: any, icon: string}>;
+  pages: Array<{ title: string, component: any, icon: string }>;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
+  constructor(
+    public platform: Platform,
+    public statusBar: StatusBar,
+    public splashScreen: SplashScreen,
+    private backgroundModeProvider: BackgroundModeProvider) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
@@ -26,7 +33,6 @@ export class MyApp {
       { title: 'Forecast', component: HomePage, icon: "sunny" },
       { title: 'Map', component: MapPage, icon: "pin" }
     ];
-
   }
 
   initializeApp() {
@@ -35,6 +41,13 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+
+      // Enable background mode
+      this.backgroundModeProvider.enableBackgroundMode();
+      // For Android (not sure about iOS) to record GPS data it needs to be pushed
+      // to the background before any GPS co-ords are recorded in the foreground
+      // TODO check if this is to do how watchPosition is called
+      this.backgroundModeProvider.moveAppToBackground();
     });
   }
 

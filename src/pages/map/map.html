@@ -3,7 +3,12 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Map</ion-title>
+    <ion-title>{{page}}</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="backgroundModeProvider.moveAppToBackground()">
+        <ion-icon name="compass"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
@@ -14,7 +19,7 @@
       <ion-icon name="pin"></ion-icon>
     </button>
   </ion-fab>
-  
+
   <div #map id="map"></div>
 
 </ion-content>

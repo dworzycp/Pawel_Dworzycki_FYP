@@ -13,6 +13,7 @@ import { NavController } from 'ionic-angular';
 import { CurrentLocationProvider } from "../../providers/current-location/current-location";
 import { StateProvider } from "../../providers/state/state";
 import { ErrorHandlerProvider } from '../../providers/error-handler/error-handler';
+import { BackgroundModeProvider } from '../../providers/background-mode/background-mode';
 
 // Google
 declare var google: any;
@@ -28,6 +29,7 @@ export class MapPage {
 
   constructor(
     public navCtrl: NavController,
+    public backgroundModeProvider: BackgroundModeProvider,
     private currentLocationProvider: CurrentLocationProvider, 
     private stateProvider: StateProvider,
     private errorHandlerProvider: ErrorHandlerProvider) { }
