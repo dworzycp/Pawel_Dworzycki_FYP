@@ -93,7 +93,7 @@ export class CurrentLocationProvider {
     }
     else {
       // Only send co-ordinates every X minutes
-      let minsSinceLastUpdate = this.genericProvider.howLongSinceDate(this.dateLastGPSCoordsWereSent)[2];
+      let minsSinceLastUpdate = this.genericProvider.howLongSinceDate(this.dateLastGPSCoordsWereSent)[1];
       if (minsSinceLastUpdate >= this.constantsProvider.howOftenToRecordGPSCoordsMin) {
         this.sendLocations(loc);
       }
@@ -107,7 +107,6 @@ export class CurrentLocationProvider {
     this.azureProvider.saveGPSCoordinates(loc);
     // Set date location was updated
     this.dateLastGPSCoordsWereSent = new Date();
-    console.log("Location updated");
   }
 
 }
