@@ -19,6 +19,7 @@ import { CurrentLocationProvider } from '../providers/current-location/current-l
 import { GenericProvider } from '../providers/generic/generic';
 import { ErrorHandlerProvider } from '../providers/error-handler/error-handler';
 import { BackgroundModeProvider } from '../providers/background-mode/background-mode';
+import { AzureProvider } from '../providers/azure/azure';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { BackgroundModeProvider } from '../providers/background-mode/background-
     BackgroundMode,
     Geolocation,
     ErrorHandlerProvider,
-    BackgroundModeProvider
+    BackgroundModeProvider,
+    AzureProvider
   ]
 })
 export class AppModule {}

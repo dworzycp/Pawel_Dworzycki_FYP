@@ -3,7 +3,7 @@
  * It also calls Google API to get an address for lat and lon co-ordinates.
  * 
  * @author Pawel Dworzycki
- * @version 07/12/2017
+ * @version 08/12/2017
  */
 
 // Framework
@@ -23,18 +23,23 @@ import { SimpleLocationModel } from '../../models/simple-location-model';
 import { ConstantsProvider } from "../constants/constants";
 import { StateProvider } from "../state/state";
 import { ErrorHandlerProvider } from '../error-handler/error-handler';
+import { AzureProvider } from "../azure/azure";
+import { GenericProvider } from "../generic/generic";
 
 @Injectable()
 export class CurrentLocationProvider {
 
   page: String = "CurrentLocationProvider";
+  private dateLastGPSCoordsWereSent: Date;
 
   constructor(
     public http: HttpClient,
     private constantsProvider: ConstantsProvider,
     private geolocation: Geolocation,
     private stateProvider: StateProvider,
-    private errorHandlerProvider: ErrorHandlerProvider) {
+    private errorHandlerProvider: ErrorHandlerProvider,
+    private azureProvider: AzureProvider,
+    private genericProvider: GenericProvider) {
     try {
       this.watchLocation();
     } catch (error) {
@@ -82,8 +87,27 @@ export class CurrentLocationProvider {
   }
 
   addVisitedLocation(loc: SimpleLocationModel) {
-    // TODO push to azure
+
+    if (this.dateLastGPSCoordsWereSent == null) {
+      this.sendLocations(loc);
+    }
+    else {
+      // Only send co-ordinates every X minutes
+      let minsSinceLastUpdate = this.genericProvider.howLongSinceDate(this.dateLastGPSCoordsWereSent)[2];
+      if (minsSinceLastUpdate >= this.constantsProvider.howOftenToRecordGPSCoordsMin) {
+        this.sendLocations(loc);
+      }
+    }
+  }
+
+  private sendLocations(loc: SimpleLocationModel) {
+    // Save internally
     this.stateProvider.visitedLocations.push(loc);
+    // Push to azure
+    this.azureProvider.saveGPSCoordinates(loc);
+    // Set date location was updated
+    this.dateLastGPSCoordsWereSent = new Date();
+    console.log("Location updated");
   }
 
 }

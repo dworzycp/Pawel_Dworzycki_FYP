@@ -3,7 +3,7 @@
  * by other classes.
  * 
  * @author Pawel Dworzycki
- * @version 26/11/2017
+ * @version 08/12/2017
  */
 
 // Framework
@@ -39,6 +39,37 @@ export class GenericProvider {
     } catch (error) {
       this.errorHandlerProvider.handleError(error.message, this.page, "convertUNIXtoUTC");
     }
+  }
+
+  /**
+   * Returns the time difference between now and a passed date.
+   * Returns an array with 3 indexes:
+   *                                 [0] hours
+   *                                 [1] minutes
+   *                                 [2] seconds
+   * @param date 
+   */
+  howLongSinceDate(date: Date): Number[] {
+    // Get the time now in milliseconds
+    let timeNow = new Date().getTime();
+    // Get the time passed in milliseconds
+    let timePassed = date.getTime();
+    // Difference in times
+    let timeDiff = timeNow - timePassed;
+
+    // Format the time to hrs : mins : seconds
+    let seconds = timeDiff / 1000;
+    let mins = seconds / 60;
+    let hours = mins / 60;
+
+    // Create return array
+    let arr = new Array<Number>();
+    arr.push(hours);
+    arr.push(mins);
+    arr.push(seconds);
+
+    // Return
+    return arr;
   }
 
 }
