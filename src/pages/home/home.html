@@ -3,11 +3,13 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>{{page}}</ion-title>
+    <ion-title class="text-align-left">{{page}}</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
+
+  <loading-spinner *ngIf="!stateProvider.weather || !stateProvider.currentLocation.results"></loading-spinner>
 
   <ion-grid>
     <ion-row *ngIf="stateProvider.weather && stateProvider.currentLocation.results">

@@ -2,12 +2,12 @@
  * This page displays the forecast to the user
  * 
  * @author Pawel Dworzycki
- * @version 07/12/2017
+ * @version 03/02/2018
  */
 
 // Framework Imports
 import { Component, OnInit } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, MenuController } from 'ionic-angular';
 
 // Models
 import { WeatherResponseModel } from "../../models/weather-response-model";
@@ -34,7 +34,11 @@ export class HomePage {
     public backgroundModeProvider: BackgroundModeProvider,
     private weatherProvider: WeatherProvider,
     private currentLocationProvider: CurrentLocationProvider,
-    private errorHandlerProvider: ErrorHandlerProvider) { }
+    private errorHandlerProvider: ErrorHandlerProvider,
+    private menuController: MenuController) {
+      // Re-enable swiping menu
+      this.menuController.swipeEnable(true);
+    }
 
   ngOnInit() {
     this.getCurrentLocation().then(() => {

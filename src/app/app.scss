@@ -51,3 +51,7 @@ h1, h2, h3, h4, h5, h6, p, span {
 .header-md::after, .tabs-md[tabsPlacement="top"] > .tabbar::after, .footer-md::before, .tabs-md[tabsPlacement="bottom"] > .tabbar::before {
     width: 0;
 }
+
+.text-align-left {
+    text-align: left !important;
+}

@@ -2,7 +2,7 @@
  * This provider is responsible for connecting the app to Azure
  * 
  * @author Pawel Dworzycki
- * @version 08/12/2017
+ * @version 03/02/2018
  */
 
 // Framework imports
@@ -14,6 +14,7 @@ import { SimpleLocationModel } from "../../models/simple-location-model";
 // Providers
 import { ConstantsProvider } from '../constants/constants';
 import { ErrorHandlerProvider } from '../error-handler/error-handler';
+import { AuthenticationProvider } from "../authentication/authentication";
 
 // Azure
 import * as WindowsAzure from 'azure-mobile-apps-client';
@@ -28,14 +29,14 @@ export class AzureProvider {
 
   constructor(
     private constantsProvider: ConstantsProvider,
-    private errorHandlerProvider: ErrorHandlerProvider ) {
+    private errorHandlerProvider: ErrorHandlerProvider,
+    private authenticationProvider: AuthenticationProvider) {
     this.client = new WindowsAzure.MobileServiceClient(this.constantsProvider.azureAPIUrl);
     this.GPSTable = this.client.getTable('GPS_Coords');
   }
 
   saveGPSCoordinates(coords: SimpleLocationModel) {
-    // TODO get userId from authentication service
-    let item = { latitude: coords.lat, longitude: coords.lng, user_id: "1" };
+    let item = { latitude: coords.lat, longitude: coords.lng, user_id: this.authenticationProvider.userId };
 
     try {
       this.GPSTable.insert(item);

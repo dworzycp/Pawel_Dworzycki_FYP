@@ -1,0 +1,27 @@
+<!-- <ion-header>
+  <ion-navbar>
+    <ion-title>Login</ion-title>
+  </ion-navbar>
+</ion-header> -->
+
+<ion-content padding class="page-login">
+
+  <form style="display:flex; height: 100%; flex-direction: column;">
+    <ion-scroll scrollY=true style="flex: 1 0 0;">
+      <ion-list class="title">
+        <img class="logo-img" src="./assets/img/umbrella.png">
+        <span>
+          <br>Should I Stay
+          <br>- Or -
+          <br>Should I Go?
+        </span>
+      </ion-list>
+    </ion-scroll>
+
+    <div padding>
+      <!-- Guidelines for the Google button https://developers.google.com/identity/branding-guidelines -->
+      <div class="signinButton googleButton buttons-one" (click)="login()"></div>
+    </div>
+  </form>
+
+</ion-content>

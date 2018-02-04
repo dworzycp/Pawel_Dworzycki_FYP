@@ -5,10 +5,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 import { Geolocation } from '@ionic-native/geolocation';
 import { BackgroundMode } from '@ionic-native/background-mode';
+import { GooglePlus } from '@ionic-native/google-plus';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { MapPage } from "../pages/map/map";
+import { LoginPage } from "../pages/login/login";
+import { LoadingSpinner } from "../pages/components/loading-spinner";
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -20,12 +23,15 @@ import { GenericProvider } from '../providers/generic/generic';
 import { ErrorHandlerProvider } from '../providers/error-handler/error-handler';
 import { BackgroundModeProvider } from '../providers/background-mode/background-mode';
 import { AzureProvider } from '../providers/azure/azure';
+import { AuthenticationProvider } from '../providers/authentication/authentication';
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    MapPage
+    MapPage,
+    LoginPage,
+    LoadingSpinner
   ],
   imports: [
     BrowserModule,
@@ -37,7 +43,9 @@ import { AzureProvider } from '../providers/azure/azure';
   entryComponents: [
     MyApp,
     HomePage,
-    MapPage
+    MapPage,
+    LoginPage,
+    LoadingSpinner
   ],
   providers: [
     StatusBar,
@@ -52,7 +60,9 @@ import { AzureProvider } from '../providers/azure/azure';
     Geolocation,
     ErrorHandlerProvider,
     BackgroundModeProvider,
-    AzureProvider
+    AzureProvider,
+    GooglePlus,
+    AuthenticationProvider
   ]
 })
 export class AppModule {}

@@ -1,0 +1,36 @@
+page-login {   
+    .content-md, .content-ios, .content-wp {
+        background: linear-gradient(#31435B, #25364A) !important;
+    }
+}
+
+.signinButton {
+    cursor:pointer;
+    width: 191px;
+    height: 46px;
+    border: none;
+    margin:auto;
+    display:block;
+}
+
+.googleButton {
+    background:url(../assets/img/google/btn_google_signin_light_normal_web.png) no-repeat;
+}
+
+.googleButton:active {
+    background:url(../assets/img/google/btn_google_signin_light_pressed_web.png) no-repeat;
+}
+
+.buttons-one {
+    padding-bottom: 7em;
+}
+
+.title {
+    text-align: center;
+    font-size: 1.5em;
+    color: white;
+}
+
+.logo-img {
+    height: 7em;
+}

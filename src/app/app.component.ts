@@ -1,15 +1,24 @@
+/**
+ * Main app component
+ * 
+ * @author Pawel Dworzycki
+ * @version 03/02/2018
+ */
 // Framework Imports
 import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { GooglePlus } from '@ionic-native/google-plus';
 
 // Providers
 import { BackgroundModeProvider } from '../providers/background-mode/background-mode';
+import { AuthenticationProvider } from "../providers/authentication/authentication";
 
 // Pages
 import { HomePage } from '../pages/home/home';
 import { MapPage } from "../pages/map/map";
+import { LoginPage } from '../pages/login/login';
 
 @Component({
   templateUrl: 'app.html'
@@ -17,7 +26,7 @@ import { MapPage } from "../pages/map/map";
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = HomePage;
+  rootPage: any = LoginPage;
 
   pages: Array<{ title: string, component: any, icon: string }>;
 
@@ -25,7 +34,9 @@ export class MyApp {
     public platform: Platform,
     public statusBar: StatusBar,
     public splashScreen: SplashScreen,
-    private backgroundModeProvider: BackgroundModeProvider) {
+    private backgroundModeProvider: BackgroundModeProvider,
+    public authenticationProvider: AuthenticationProvider,
+    private googlePlus: GooglePlus) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
@@ -56,4 +67,20 @@ export class MyApp {
     // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);
   }
+
+  logout() {
+    this.googlePlus.logout()
+      // Logged in
+      // TODO redirect the user
+      .then(res => this.logOutSuccess())
+      // Error
+      // TODO error handling
+      .catch(err => alert(err));
+  }
+
+  private logOutSuccess() {
+    // Redirect the user back to the login page
+    this.nav.setRoot(LoginPage);
+  }
+
 }

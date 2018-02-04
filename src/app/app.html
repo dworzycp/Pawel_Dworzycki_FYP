@@ -3,9 +3,11 @@
   <ion-content id="nav-list">
 
     <div id="user-holder">
-      <img src="./assets/img/img_avatar.png" alt="Avatar" id="avatar">
+      <img src="{{authenticationProvider.userImageUrl}}" alt="Avatar" id="avatar" *ngIf="authenticationProvider.userImageUrl">
+      <img src="./assets/img/img_avatar.png" alt="Avatar" id="avatar" *ngIf="!authenticationProvider.userImageUrl">
       <ion-title id="name">
-        <span>Pawel</span>
+        <span *ngIf="authenticationProvider.userGivenName"  id="name">{{authenticationProvider.userGivenName}}</span>
+        <span *ngIf="!authenticationProvider.userGivenName"  id="name">User</span>
       </ion-title>
     </div>
 
@@ -16,7 +18,7 @@
           {{p.title}}
         </span>
       </button>
-      <button menuClose ion-item (click)="TODO()">
+      <button menuClose ion-item (click)="logout()">
         <span id="menu-list-item">
           <ion-icon name="log-out" item-start></ion-icon>
           Sign out
