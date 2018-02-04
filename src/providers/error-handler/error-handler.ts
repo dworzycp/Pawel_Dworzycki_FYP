@@ -24,6 +24,8 @@ export class ErrorHandlerProvider {
     switch (error) {
       case "NO_COORDS":
         return "No available co-ordinates.";
+      case "PERMISSION_MISSING":
+        return "Application is missing an essential permission."; 
       default:
         return error;
     }

@@ -2,7 +2,7 @@
  * This page displays the forecast to the user
  * 
  * @author Pawel Dworzycki
- * @version 03/02/2018
+ * @version 04/02/2018
  */
 
 // Framework Imports
@@ -36,18 +36,30 @@ export class HomePage {
     private currentLocationProvider: CurrentLocationProvider,
     private errorHandlerProvider: ErrorHandlerProvider,
     private menuController: MenuController) {
-      // Re-enable swiping menu
-      this.menuController.swipeEnable(true);
-    }
+    // Re-enable swiping menu
+    this.menuController.swipeEnable(true);
+  }
 
   ngOnInit() {
-    this.getCurrentLocation().then(() => {
-      // Call the weather API if there is no weather
-      // TODO update every hour
-      if (this.stateProvider.weather == undefined) {
-        this.getWeather();
-      }
-    });
+    this.checkIfHasPermission();
+  }
+
+  private checkIfHasPermission() {
+    if (this.stateProvider.hasLocationPermission) {
+      this.getCurrentLocation().then(() => {
+        // Call the weather API if there is no weather
+        // TODO update every hour
+        if (this.stateProvider.weather == undefined) {
+          this.getWeather();
+        }
+      });
+    }
+    else {
+      // Request the permission
+      this.stateProvider.requestLocationPermission();
+      // Check if the user has given permission
+      this.checkIfHasPermission();
+    }
   }
 
   getWeather() {

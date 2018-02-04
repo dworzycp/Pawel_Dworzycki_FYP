@@ -2,7 +2,7 @@
  * Main app component
  * 
  * @author Pawel Dworzycki
- * @version 03/02/2018
+ * @version 04/02/2018
  */
 // Framework Imports
 import { Component, ViewChild } from '@angular/core';
@@ -10,6 +10,7 @@ import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { GooglePlus } from '@ionic-native/google-plus';
+import { AndroidPermissions } from '@ionic-native/android-permissions';
 
 // Providers
 import { BackgroundModeProvider } from '../providers/background-mode/background-mode';
@@ -36,7 +37,8 @@ export class MyApp {
     public splashScreen: SplashScreen,
     private backgroundModeProvider: BackgroundModeProvider,
     public authenticationProvider: AuthenticationProvider,
-    private googlePlus: GooglePlus) {
+    private googlePlus: GooglePlus,
+    private androidPermissions: AndroidPermissions) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
@@ -54,11 +56,14 @@ export class MyApp {
       this.splashScreen.hide();
 
       // Enable background mode
-      this.backgroundModeProvider.enableBackgroundMode();
+      //this.backgroundModeProvider.enableBackgroundMode();
       // For Android (not sure about iOS) to record GPS data it needs to be pushed
       // to the background before any GPS co-ords are recorded in the foreground
       // TODO check if this is to do how watchPosition is called
-      this.backgroundModeProvider.moveAppToBackground();
+      //this.backgroundModeProvider.moveAppToBackground();
+
+      // Ask the user for required permissions
+      this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.ACCESS_FINE_LOCATION)
     });
   }
 

@@ -30,13 +30,25 @@ export class MapPage {
   constructor(
     public navCtrl: NavController,
     public backgroundModeProvider: BackgroundModeProvider,
-    private currentLocationProvider: CurrentLocationProvider, 
+    private currentLocationProvider: CurrentLocationProvider,
     private stateProvider: StateProvider,
     private errorHandlerProvider: ErrorHandlerProvider) { }
 
   ionViewDidLoad() {
-    // Only load the map if it hasn't been loaded
-    this.loadMap();
+    this.checkIfHasPermission();
+  }
+
+  private checkIfHasPermission() {
+    if (this.stateProvider.hasLocationPermission) {
+      // TODO? Only load the map if it hasn't been loaded already
+      this.loadMap();
+    }
+    else {
+      // Request the permission
+      this.stateProvider.requestLocationPermission();
+      // Check if the user has given permission
+      this.checkIfHasPermission();
+    }
   }
 
   loadMap() {

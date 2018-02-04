@@ -6,6 +6,7 @@ import { HttpModule } from '@angular/http';
 import { Geolocation } from '@ionic-native/geolocation';
 import { BackgroundMode } from '@ionic-native/background-mode';
 import { GooglePlus } from '@ionic-native/google-plus';
+import { AndroidPermissions } from '@ionic-native/android-permissions';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
@@ -62,7 +63,8 @@ import { AuthenticationProvider } from '../providers/authentication/authenticati
     BackgroundModeProvider,
     AzureProvider,
     GooglePlus,
-    AuthenticationProvider
+    AuthenticationProvider,
+    AndroidPermissions
   ]
 })
 export class AppModule {}

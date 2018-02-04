@@ -10,8 +10,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Geolocation } from '@ionic-native/geolocation';
-//import { Observable } from 'rxjs/Observable';
-// TODO needed?
 import { Observable } from 'Rxjs/rx';
 import { Subscription } from "rxjs/Subscription";
 
@@ -41,9 +39,21 @@ export class CurrentLocationProvider {
     private azureProvider: AzureProvider,
     private genericProvider: GenericProvider) {
     try {
-      this.watchLocation();
+      this.checkIfHasPermission();
     } catch (error) {
       this.errorHandlerProvider.handleError(error.message, this.page, "constructor");
+    }
+  }
+
+  private checkIfHasPermission() {
+    if (this.stateProvider.hasLocationPermission) {
+      this.watchLocation();
+    }
+    else {
+      // Request the permission
+      this.stateProvider.requestLocationPermission();
+      // Check if the user has given permission
+      this.checkIfHasPermission();
     }
   }
 
