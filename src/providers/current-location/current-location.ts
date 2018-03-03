@@ -3,7 +3,7 @@
  * It also calls Google API to get an address for lat and lon co-ordinates.
  * 
  * @author Pawel Dworzycki
- * @version 08/12/2017
+ * @version 03/03/2018
  */
 
 // Framework
@@ -61,8 +61,7 @@ export class CurrentLocationProvider {
     return new Promise<any>(resolve => {
       var onSuccess = function (position) {
         // TODO find a better solution
-        // For now the lat and long coords are saved in local storage rather than
-        // returned due to scope issues
+        // For now the lat and long coords are saved in local storage rather than returned due to scope issues
         localStorage.setItem("latitude", position.coords.latitude);
         localStorage.setItem("longitude", position.coords.longitude);
 
@@ -97,7 +96,6 @@ export class CurrentLocationProvider {
   }
 
   addVisitedLocation(loc: SimpleLocationModel) {
-
     if (this.dateLastGPSCoordsWereSent == null) {
       this.sendLocations(loc);
     }

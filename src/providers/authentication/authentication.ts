@@ -2,7 +2,7 @@
  * Provider responsible for handling login and authentication
  * 
  * @author Pawel Dworzycki
- * @version 02/02/2018
+ * @version 03/03/2018
  */
 
 // Framework imports
@@ -23,6 +23,10 @@ export class AuthenticationProvider {
 
   setUserObject(userObject) {
     this.userObject = userObject;
+  }
+
+  clearUserObject() {
+    this.userObject = new UserObjectModel();
   }
 
   get userGivenName(): String {

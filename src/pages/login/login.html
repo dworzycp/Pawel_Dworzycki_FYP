@@ -20,7 +20,7 @@
 
     <div padding>
       <!-- Guidelines for the Google button https://developers.google.com/identity/branding-guidelines -->
-      <div class="signinButton googleButton buttons-one" (click)="login()"></div>
+      <div class="signinButton googleButton buttons-one" (click)="login()" *ngIf="showLoginButton"></div>
     </div>
   </form>
 

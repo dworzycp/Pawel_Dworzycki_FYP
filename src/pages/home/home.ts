@@ -2,7 +2,7 @@
  * This page displays the forecast to the user
  * 
  * @author Pawel Dworzycki
- * @version 04/02/2018
+ * @version 03/03/2018
  */
 
 // Framework Imports
@@ -63,7 +63,6 @@ export class HomePage {
   }
 
   getWeather() {
-    // TODO hardcoded
     let lat: String = null;
     let lng: String = null;
 

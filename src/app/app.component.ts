@@ -2,11 +2,11 @@
  * Main app component
  * 
  * @author Pawel Dworzycki
- * @version 04/02/2018
+ * @version 03/03/2018
  */
 // Framework Imports
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
+import { Nav, Platform, NavController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { GooglePlus } from '@ionic-native/google-plus';
@@ -55,15 +55,15 @@ export class MyApp {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
 
-      // Enable background mode
-      //this.backgroundModeProvider.enableBackgroundMode();
-      // For Android (not sure about iOS) to record GPS data it needs to be pushed
-      // to the background before any GPS co-ords are recorded in the foreground
-      // TODO check if this is to do how watchPosition is called
-      //this.backgroundModeProvider.moveAppToBackground();
-
       // Ask the user for required permissions
       this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.ACCESS_FINE_LOCATION)
+
+      // Enable background mode
+      this.backgroundModeProvider.enableBackgroundMode();
+      // For Android (not sure about iOS) to record GPS data it needs to be pushed
+      // to the background before any GPS co-ords are recorded in the foreground
+      // TODO check if this is to do with how watchPosition is called
+      //this.backgroundModeProvider.moveAppToBackground();
     });
   }
 
@@ -76,14 +76,14 @@ export class MyApp {
   logout() {
     this.googlePlus.logout()
       // Logged in
-      // TODO redirect the user
       .then(res => this.logOutSuccess())
       // Error
-      // TODO error handling
       .catch(err => alert(err));
   }
 
   private logOutSuccess() {
+    // Clear user object
+    this.authenticationProvider.clearUserObject();
     // Redirect the user back to the login page
     this.nav.setRoot(LoginPage);
   }

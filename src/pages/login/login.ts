@@ -3,7 +3,7 @@
  * Currently only Google Authentication is supported
  * 
  * @author Pawel Dworzycki
- * @version 02/02/2018
+ * @version 03/03/2018
  */
 // Framework imports
 import { Component } from '@angular/core';
@@ -15,6 +15,7 @@ import { HomePage } from "../home/home";
 
 // Providers
 import { AuthenticationProvider } from "../../providers/authentication/authentication";
+import { BackgroundModeProvider } from "../../providers/background-mode/background-mode";
 
 @Component({
   selector: 'page-login',
@@ -22,23 +23,27 @@ import { AuthenticationProvider } from "../../providers/authentication/authentic
 })
 export class LoginPage {
 
+  // View
+  public showLoginButton: boolean;
+
   constructor(
-    public navCtrl: NavController, 
-    private platform: Platform, 
-    private googlePlus: GooglePlus, 
+    public navCtrl: NavController,
+    private platform: Platform,
+    private googlePlus: GooglePlus,
     private menu: MenuController,
-    private authenticationProvider: AuthenticationProvider) {
+    private authenticationProvider: AuthenticationProvider,
+    private backgroundModeProvider: BackgroundModeProvider) {
     // Disable side menu
     this.menu.swipeEnable(false);
+    this.showLoginButton = false;
 
     platform.ready().then(() => {
       // Check if the user is already signed in
       this.googlePlus.trySilentLogin({})
-      // Logged in
-      // TODO redirect the user
-      .then(res => this.LoginSuccess(res))
-      // Error - do nothing
-      .catch();
+        // Logged in
+        .then(res => this.LoginSuccess(res))
+        // Error - do nothing
+        .catch(res => this.silentFailed());
     });
   }
 
@@ -46,7 +51,6 @@ export class LoginPage {
     // TODO probably move this to authentication service
     this.googlePlus.login({})
       // Logged in
-      // TODO redirect the user
       .then(res => this.LoginSuccess(res))
       // Error
       // TODO error handling
@@ -56,8 +60,15 @@ export class LoginPage {
   private LoginSuccess(res) {
     // Set user object
     this.authenticationProvider.setUserObject(res);
-    // Redirect the user to the home page
-    this.navCtrl.setRoot(HomePage);
+    // TODO for now the app will only collect data i.e. no functionality will be available to the user
+    //      i.e. move the app straight to the bg
+    this.backgroundModeProvider.moveAppToBackground();
+    // TODO Redirect the user to the home page
+    //this.navCtrl.setRoot(HomePage);
+  }
+
+  private silentFailed() {
+    this.showLoginButton = true;
   }
 
   // TODO check that the user is allowed to leave this page, i.e. is logged in

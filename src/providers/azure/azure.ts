@@ -36,12 +36,14 @@ export class AzureProvider {
   }
 
   saveGPSCoordinates(coords: SimpleLocationModel) {
-    let item = { latitude: coords.lat, longitude: coords.lng, user_id: this.authenticationProvider.userId };
+    if (this.authenticationProvider.userId != null) {
+      let item = { latitude: coords.lat, longitude: coords.lng, user_id: this.authenticationProvider.userId };
 
-    try {
-      this.GPSTable.insert(item);
-    } catch (error) {
-      this.errorHandlerProvider.handleError(error.message, this.page, "saveGPSCoordinates");
+      try {
+        this.GPSTable.insert(item);
+      } catch (error) {
+        this.errorHandlerProvider.handleError(error.message, this.page, "saveGPSCoordinates");
+      }
     }
   }
 
