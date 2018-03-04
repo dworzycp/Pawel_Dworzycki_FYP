@@ -2,7 +2,7 @@
  * Provider designed to handle errors
  * 
  * @author Pawel Dworzycki
- * @version 07/12/2017
+ * @version 04/03/2018
  */
 
 // Framework imports
@@ -25,7 +25,9 @@ export class ErrorHandlerProvider {
       case "NO_COORDS":
         return "No available co-ordinates.";
       case "PERMISSION_MISSING":
-        return "Application is missing an essential permission."; 
+        return "Application is missing an essential permission.";
+      case "USER_NOT_LOGGED_IN":
+        return "Please log in.";
       default:
         return error;
     }

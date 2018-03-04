@@ -2,7 +2,7 @@
  * This provider is responsible for connecting the app to Azure
  * 
  * @author Pawel Dworzycki
- * @version 03/02/2018
+ * @version 04/03/2018
  */
 
 // Framework imports
@@ -23,7 +23,6 @@ import * as WindowsAzure from 'azure-mobile-apps-client';
 export class AzureProvider {
 
   private page: String = "AzureProvider";
-
   private client: any;
   private GPSTable: any;
 
@@ -36,14 +35,12 @@ export class AzureProvider {
   }
 
   saveGPSCoordinates(coords: SimpleLocationModel) {
-    if (this.authenticationProvider.userId != null) {
-      let item = { latitude: coords.lat, longitude: coords.lng, user_id: this.authenticationProvider.userId };
+    let item = { latitude: coords.lat, longitude: coords.lng, user_id: this.authenticationProvider.userId };
 
-      try {
-        this.GPSTable.insert(item);
-      } catch (error) {
-        this.errorHandlerProvider.handleError(error.message, this.page, "saveGPSCoordinates");
-      }
+    try {
+      this.GPSTable.insert(item);
+    } catch (error) {
+      this.errorHandlerProvider.handleError(error.message, this.page, "saveGPSCoordinates");
     }
   }
 

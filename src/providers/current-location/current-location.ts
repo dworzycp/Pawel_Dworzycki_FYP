@@ -3,7 +3,7 @@
  * It also calls Google API to get an address for lat and lon co-ordinates.
  * 
  * @author Pawel Dworzycki
- * @version 03/03/2018
+ * @version 04/03/2018
  */
 
 // Framework
@@ -23,6 +23,7 @@ import { StateProvider } from "../state/state";
 import { ErrorHandlerProvider } from '../error-handler/error-handler';
 import { AzureProvider } from "../azure/azure";
 import { GenericProvider } from "../generic/generic";
+import { AuthenticationProvider } from '../authentication/authentication';
 
 @Injectable()
 export class CurrentLocationProvider {
@@ -37,15 +38,12 @@ export class CurrentLocationProvider {
     private stateProvider: StateProvider,
     private errorHandlerProvider: ErrorHandlerProvider,
     private azureProvider: AzureProvider,
-    private genericProvider: GenericProvider) {
-    try {
-      this.checkIfHasPermission();
-    } catch (error) {
-      this.errorHandlerProvider.handleError(error.message, this.page, "constructor");
-    }
-  }
+    private genericProvider: GenericProvider,
+    private authenticationProvider: AuthenticationProvider) { }
 
-  private checkIfHasPermission() {
+  // TODO this is bad. Check for permission when calling a method rather than depend on a method being
+  // called from here
+  public checkIfHasPermission() {
     if (this.stateProvider.hasLocationPermission) {
       this.watchLocation();
     }
@@ -78,7 +76,9 @@ export class CurrentLocationProvider {
     });
   }
 
+  // TODO singleton - this method should never be called more than once
   watchLocation() {
+    // TODO check for premission here rather than before calling this
     this.geolocation.watchPosition()
       .subscribe(position => {
         if (position.coords !== undefined) {
@@ -96,25 +96,35 @@ export class CurrentLocationProvider {
   }
 
   addVisitedLocation(loc: SimpleLocationModel) {
-    if (this.dateLastGPSCoordsWereSent == null) {
-      this.sendLocations(loc);
-    }
-    else {
-      // Only send co-ordinates every X minutes
-      let minsSinceLastUpdate = this.genericProvider.howLongSinceDate(this.dateLastGPSCoordsWereSent)[1];
-      if (minsSinceLastUpdate >= this.constantsProvider.howOftenToRecordGPSCoordsMin) {
+    if (this.authenticationProvider.userId == null) throw new Error("USER_NOT_LOGGED_IN");
+
+    try {
+      if (this.dateLastGPSCoordsWereSent == null) {
         this.sendLocations(loc);
       }
+      else {
+        // Only send co-ordinates every X minutes
+        let minsSinceLastUpdate = this.genericProvider.howLongSinceDate(this.dateLastGPSCoordsWereSent)[1];
+        if (minsSinceLastUpdate >= this.constantsProvider.howOftenToRecordGPSCoordsMin) {
+          this.sendLocations(loc);
+        }
+      }
+    } catch (error) {
+      this.errorHandlerProvider.handleError(error.message, this.page, "addVisitedLocation");
     }
   }
 
   private sendLocations(loc: SimpleLocationModel) {
-    // Save internally
-    this.stateProvider.visitedLocations.push(loc);
-    // Push to azure
-    this.azureProvider.saveGPSCoordinates(loc);
-    // Set date location was updated
-    this.dateLastGPSCoordsWereSent = new Date();
+    try {
+      // Save internally
+      this.stateProvider.visitedLocations.push(loc);
+      // Push to azure
+      this.azureProvider.saveGPSCoordinates(loc);
+      // Set date location was updated
+      this.dateLastGPSCoordsWereSent = new Date();
+    } catch (error) {
+      this.errorHandlerProvider.handleError(error.message, this.page, "sendLocations");
+    }
   }
 
 }

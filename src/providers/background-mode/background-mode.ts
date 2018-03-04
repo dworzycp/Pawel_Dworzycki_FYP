@@ -19,6 +19,8 @@ export class BackgroundModeProvider {
   enableBackgroundMode() {
     this.backgroundMode.enable();
     this.optimisations();
+    // Call watchPosition
+    this.currentLocationProvider.checkIfHasPermission();
   }
 
   moveAppToBackground() {
