@@ -3,17 +3,18 @@
  * whilst in the background
  * 
  * @author Pawel Dworzycki
- * @version 07/12/2017
+ * @version 04/03/2018
  */
 
 // Framework imports
 import { Injectable } from '@angular/core';
 import { BackgroundMode } from '@ionic-native/background-mode';
+import { CurrentLocationProvider } from '../current-location/current-location';
 
 @Injectable()
 export class BackgroundModeProvider {
 
-  constructor(private backgroundMode: BackgroundMode) {}
+  constructor(private backgroundMode: BackgroundMode, private currentLocationProvider: CurrentLocationProvider) {}
 
   enableBackgroundMode() {
     this.backgroundMode.enable();
