@@ -2,7 +2,7 @@
  * This provider is responsible for connecting the app to Azure
  * 
  * @author Pawel Dworzycki
- * @version 04/03/2018
+ * @version 07/03/2018
  */
 
 // Framework imports
@@ -25,6 +25,7 @@ export class AzureProvider {
   private page: String = "AzureProvider";
   private client: any;
   private GPSTable: any;
+  private UserTable: any;
 
   constructor(
     private constantsProvider: ConstantsProvider,
@@ -32,6 +33,7 @@ export class AzureProvider {
     private authenticationProvider: AuthenticationProvider) {
     this.client = new WindowsAzure.MobileServiceClient(this.constantsProvider.azureAPIUrl);
     this.GPSTable = this.client.getTable('GPS_Coords');
+    this.UserTable = this.client.getTable('Users');
   }
 
   saveGPSCoordinates(coords: SimpleLocationModel) {
@@ -43,5 +45,30 @@ export class AzureProvider {
       this.errorHandlerProvider.handleError(error.message, this.page, "saveGPSCoordinates");
     }
   }
+
+  public isNewUser() {
+    this.UserTable
+      .where({ userId: this.authenticationProvider.userId })
+      .read()
+      // .then(success, failure) -- if there is a user, i.e.: success donothing
+      .then(this.doNothing(), this.createReferenceToUserInDB());
+  }
+
+  createReferenceToUserInDB() {
+    let user = {
+      userId: this.authenticationProvider.userId,
+      userFirstName: this.authenticationProvider.userGivenName,
+      userLastName: this.authenticationProvider.userLastName,
+      userEmail: this.authenticationProvider.userEmail
+    };
+
+    try {
+      this.UserTable.insert(user);
+    } catch (error) {
+      this.errorHandlerProvider.handleError(error.message, this.page, "createReferenceToUserInDB");
+    }
+  }
+
+  doNothing() { }
 
 }

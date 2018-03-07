@@ -3,7 +3,7 @@
  * Currently only Google Authentication is supported
  * 
  * @author Pawel Dworzycki
- * @version 04/03/2018
+ * @version 07/03/2018
  */
 // Framework imports
 import { Component } from '@angular/core';
@@ -16,12 +16,16 @@ import { HomePage } from "../home/home";
 // Providers
 import { AuthenticationProvider } from "../../providers/authentication/authentication";
 import { BackgroundModeProvider } from "../../providers/background-mode/background-mode";
+import { AzureProvider } from "../../providers/azure/azure";
+import { ErrorHandlerProvider } from "../../providers/error-handler/error-handler";
 
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html',
 })
 export class LoginPage {
+
+  page: String = "Login";
 
   // View
   public showLoginButton: boolean;
@@ -32,7 +36,9 @@ export class LoginPage {
     private googlePlus: GooglePlus,
     private menu: MenuController,
     private authenticationProvider: AuthenticationProvider,
-    private backgroundModeProvider: BackgroundModeProvider) {
+    private backgroundModeProvider: BackgroundModeProvider,
+    private azureProvider: AzureProvider,
+    private errorHandlerProvider: ErrorHandlerProvider) {
     // Disable side menu
     this.menu.swipeEnable(false);
     this.showLoginButton = false;
@@ -40,9 +46,7 @@ export class LoginPage {
     platform.ready().then(() => {
       // Check if the user is already signed in
       this.googlePlus.trySilentLogin({})
-        // Logged in
         .then(res => this.LoginSuccess(res))
-        // Error - do nothing
         .catch(res => this.silentFailed());
     });
   }
@@ -50,11 +54,16 @@ export class LoginPage {
   public login() {
     // TODO probably move this to authentication service
     this.googlePlus.login({})
-      // Logged in
-      .then(res => this.LoginSuccess(res))
-      // Error
-      // TODO error handling
-      .catch(err => alert(err));
+      .then(res => this.LoginSuccessNotSilent(res))
+      .catch(err => this.errorHandlerProvider.handleError(err, this.page, "login"));
+  }
+
+  private LoginSuccessNotSilent(res) {
+    // Now call LoginSuccess(res)
+    this.LoginSuccess(res);
+    // Check if the user is new
+    // TODO will this work when LoginSuccess redirects to home page?
+    this.azureProvider.isNewUser();
   }
 
   private LoginSuccess(res) {
@@ -74,6 +83,7 @@ export class LoginPage {
   }
 
   // TODO check that the user is allowed to leave this page, i.e. is logged in
+  //      more important on other pages than this CanEnter...
   // ionViewCanLeave(): boolean {
   //   if () {
   //     return true;

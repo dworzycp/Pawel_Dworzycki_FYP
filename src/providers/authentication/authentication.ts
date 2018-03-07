@@ -2,7 +2,7 @@
  * Provider responsible for handling login and authentication
  * 
  * @author Pawel Dworzycki
- * @version 03/03/2018
+ * @version 07/03/2018
  */
 
 // Framework imports
@@ -33,12 +33,20 @@ export class AuthenticationProvider {
     return this.userObject.givenName;
   }
 
+  get userLastName(): String {
+    return this.userObject.familyName;
+  }
+
   get userImageUrl(): String {
     return this.userObject.imageUrl;
   }
 
   get userId(): String {
     return this.userObject.userId;
+  }
+
+  get userEmail(): String {
+    return this.userObject.email;
   }
 
 }

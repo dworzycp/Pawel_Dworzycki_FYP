@@ -3,7 +3,7 @@
  * whilst in the background
  * 
  * @author Pawel Dworzycki
- * @version 04/03/2018
+ * @version 07/03/2018
  */
 
 // Framework imports
@@ -14,7 +14,7 @@ import { CurrentLocationProvider } from '../current-location/current-location';
 @Injectable()
 export class BackgroundModeProvider {
 
-  constructor(private backgroundMode: BackgroundMode, private currentLocationProvider: CurrentLocationProvider) {}
+  constructor(private backgroundMode: BackgroundMode, private currentLocationProvider: CurrentLocationProvider) { }
 
   enableBackgroundMode() {
     this.backgroundMode.enable();
@@ -30,6 +30,12 @@ export class BackgroundModeProvider {
   }
 
   private optimisations() {
+    // Change notification title, message etc
+    this.backgroundMode.setDefaults({
+      title: "Collecting GPS data",
+      text: "Please do not turn this app off"
+    });
+
     // Override the back button on Android to go to background instead of closing the app.
     //this.backgroundMode.overrideBackButton();
 
