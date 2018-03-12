@@ -3,7 +3,7 @@
  * application.
  * 
  * @author Pawel Dworzycki
- * @version 04/02/2018
+ * @version 12/03/2018
  */
 
 // Framework Imports
@@ -26,10 +26,13 @@ export class StateProvider {
   visitedLocations: SimpleLocationModel[];
   // Weather
   weather: WeatherResponseModel;
+  // Offline sync list
+  unsentCoords: SimpleLocationModel[];
 
   constructor(private androidPermissions: AndroidPermissions, private errorHandlerProvider: ErrorHandlerProvider) {
     this.currentLocation = new GoogleLocationModel();
     this.visitedLocations = new Array<SimpleLocationModel>();
+    this.unsentCoords = new Array<SimpleLocationModel>();
   }
 
   hasLocationPermission(): boolean {

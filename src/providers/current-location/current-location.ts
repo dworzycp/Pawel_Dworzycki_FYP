@@ -3,7 +3,7 @@
  * It also calls Google API to get an address for lat and lon co-ordinates.
  * 
  * @author Pawel Dworzycki
- * @version 04/03/2018
+ * @version 12/03/2018
  */
 
 // Framework
@@ -24,6 +24,7 @@ import { ErrorHandlerProvider } from '../error-handler/error-handler';
 import { AzureProvider } from "../azure/azure";
 import { GenericProvider } from "../generic/generic";
 import { AuthenticationProvider } from '../authentication/authentication';
+import { DateTime } from 'ionic-angular';
 
 @Injectable()
 export class CurrentLocationProvider {
@@ -85,8 +86,12 @@ export class CurrentLocationProvider {
           let loc = new SimpleLocationModel();
           loc.lat = position.coords.latitude;
           loc.lng = position.coords.longitude;
-          // TODO this array needs to also sync with azure
+          loc.createdAt = new Date();
+          loc.sentToAzure = false;
           this.addVisitedLocation(loc);
+        }
+        else {
+          this.errorHandlerProvider.handleError("position.coords is undefined", this.page, "watchLocation");
         }
       });
   }
@@ -118,8 +123,9 @@ export class CurrentLocationProvider {
     try {
       // Save internally
       this.stateProvider.visitedLocations.push(loc);
+      this.stateProvider.unsentCoords.push(loc);
       // Push to azure
-      this.azureProvider.saveGPSCoordinates(loc);
+      this.azureProvider.sendGPSCoordinates();
       // Set date location was updated
       this.dateLastGPSCoordsWereSent = new Date();
     } catch (error) {

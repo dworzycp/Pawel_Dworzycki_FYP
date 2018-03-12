@@ -3,7 +3,7 @@
  * Currently only Google Authentication is supported
  * 
  * @author Pawel Dworzycki
- * @version 07/03/2018
+ * @version 12/03/2018
  */
 // Framework imports
 import { Component } from '@angular/core';
@@ -18,6 +18,7 @@ import { AuthenticationProvider } from "../../providers/authentication/authentic
 import { BackgroundModeProvider } from "../../providers/background-mode/background-mode";
 import { AzureProvider } from "../../providers/azure/azure";
 import { ErrorHandlerProvider } from "../../providers/error-handler/error-handler";
+import { StateProvider } from "../../providers/state/state";
 
 @Component({
   selector: 'page-login',
@@ -29,6 +30,7 @@ export class LoginPage {
 
   // View
   public showLoginButton: boolean;
+  public showDebug: boolean;
 
   constructor(
     public navCtrl: NavController,
@@ -38,10 +40,12 @@ export class LoginPage {
     private authenticationProvider: AuthenticationProvider,
     private backgroundModeProvider: BackgroundModeProvider,
     private azureProvider: AzureProvider,
-    private errorHandlerProvider: ErrorHandlerProvider) {
+    private errorHandlerProvider: ErrorHandlerProvider,
+    public stateProvider: StateProvider) {
     // Disable side menu
     this.menu.swipeEnable(false);
     this.showLoginButton = false;
+    this.showDebug = false;
 
     platform.ready().then(() => {
       // Check if the user is already signed in
@@ -52,7 +56,6 @@ export class LoginPage {
   }
 
   public login() {
-    // TODO probably move this to authentication service
     this.googlePlus.login({})
       .then(res => this.LoginSuccessNotSilent(res))
       .catch(err => this.errorHandlerProvider.handleError(err, this.page, "login"));
@@ -80,6 +83,10 @@ export class LoginPage {
 
   private silentFailed() {
     this.showLoginButton = true;
+  }
+
+  public toggleDebugMode() {
+    this.showDebug = !this.showDebug;
   }
 
   // TODO check that the user is allowed to leave this page, i.e. is logged in

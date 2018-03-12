@@ -6,22 +6,56 @@
 
 <ion-content padding class="page-login">
 
-  <form style="display:flex; height: 100%; flex-direction: column;">
+  <form style="display:flex; height: 100%; flex-direction: column;" *ngIf="showDebug == true">
     <ion-scroll scrollY=true style="flex: 1 0 0;">
       <ion-list class="title">
-        <img class="logo-img" src="./assets/img/umbrella.png">
+        <img class="logo-img" src="./assets/img/umbrella.png" (click)="toggleDebugMode()">
         <span>
           <br>Should I Stay
           <br>- Or -
           <br>Should I Go?
         </span>
       </ion-list>
+      <table *ngIf="stateProvider.unsentCoords.length > 0">
+        <tr>
+          <th>Created</th>
+          <th>Lat</th>
+          <th>Lng</th>
+        </tr>
+        <tr *ngFor="let coord of stateProvider.unsentCoords">
+          <td>{{coord.createdAt}}</td>
+          <td>{{coord.lat}}</td>
+          <td>{{coord.lng}}</td>
+        </tr>
+      </table>
     </ion-scroll>
 
     <div padding>
       <!-- Guidelines for the Google button https://developers.google.com/identity/branding-guidelines -->
       <div class="signinButton googleButton buttons-one" (click)="login()" *ngIf="showLoginButton"></div>
     </div>
+  </form>
+
+  <!-- DEBUG MODE -->
+  <form style="display:flex; height: 100%; flex-direction: column;" *ngIf="showDebug == true">
+    <ion-list class="title">
+      <img class="logo-img" src="./assets/img/umbrella.png" (click)="toggleDebugMode()">
+    </ion-list>
+    <table *ngIf="stateProvider.visitedLocations.length > 0">
+      <tr>
+        <th>Created</th>
+        <th>Lat</th>
+        <th>Lng</th>
+        <th>Azure</th>
+      </tr>
+      <tr *ngFor="let coord of stateProvider.visitedLocations">
+        <td>{{coord.createdAt}}</td>
+        <td>{{coord.lat}}</td>
+        <td>{{coord.lng}}</td>
+        <td>{{coord.sentToAzure}}</td>
+      </tr>
+    </table>
+    </ion-scroll>
   </form>
 
 </ion-content>

@@ -1,8 +1,8 @@
 /**
- * This provider is responsible for keeping constants such as: URLs
+ * This provider is responsible for keeping constants such as: URLs, api keys etc.
  * 
  * @author Pawel Dworzycki
- * @version 03/02/2018
+ * @version 08/03/2018
  */
 
 // Framework Imports
@@ -21,7 +21,7 @@ export class ConstantsProvider {
   private weatherKey = "5a4410731f03780271e8dc702fe7bfa7";
 
   // Parameters
-  private azureGPSCooldownMins: Number = 30;
+  private azureGPSCooldownMins: Number = 20;
 
   constructor() { }
 

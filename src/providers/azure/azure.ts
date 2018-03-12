@@ -2,7 +2,7 @@
  * This provider is responsible for connecting the app to Azure
  * 
  * @author Pawel Dworzycki
- * @version 07/03/2018
+ * @version 12/03/2018
  */
 
 // Framework imports
@@ -15,6 +15,7 @@ import { SimpleLocationModel } from "../../models/simple-location-model";
 import { ConstantsProvider } from '../constants/constants';
 import { ErrorHandlerProvider } from '../error-handler/error-handler';
 import { AuthenticationProvider } from "../authentication/authentication";
+import { StateProvider } from "../state/state";
 
 // Azure
 import * as WindowsAzure from 'azure-mobile-apps-client';
@@ -23,33 +24,47 @@ import * as WindowsAzure from 'azure-mobile-apps-client';
 export class AzureProvider {
 
   private page: String = "AzureProvider";
-  private client: any;
-  private GPSTable: any;
-  private UserTable: any;
+
+  private client: any;          // Connection to the Azure Mobile App backend
+  private GPSTable: any;        // Reference to the GPS table
+  private UserTable: any;       // Reference to the User table
 
   constructor(
     private constantsProvider: ConstantsProvider,
     private errorHandlerProvider: ErrorHandlerProvider,
-    private authenticationProvider: AuthenticationProvider) {
+    private authenticationProvider: AuthenticationProvider,
+    private stateProvider: StateProvider) {
+    // Set up connection with Azure DB
     this.client = new WindowsAzure.MobileServiceClient(this.constantsProvider.azureAPIUrl);
+    // Set up references to tables
     this.GPSTable = this.client.getTable('GPS_Coords');
     this.UserTable = this.client.getTable('Users');
   }
 
-  saveGPSCoordinates(coords: SimpleLocationModel) {
-    let item = { latitude: coords.lat, longitude: coords.lng, user_id: this.authenticationProvider.userId };
+  sendGPSCoordinates() {
+    this.stateProvider.unsentCoords.forEach(coord => {
+      let item = { actual_createdAt: coord.createdAt, latitude: coord.lat, longitude: coord.lng, user_id: this.authenticationProvider.userId };
+      console.log("Trying to send " + coord.lat + ", " + coord.lng + " to Azure");
+      
+      this.GPSTable.insert(item).then(success => {
+        let index = this.stateProvider.unsentCoords.indexOf(coord);
+        this.stateProvider.unsentCoords.splice(index, 1);
+        console.log("sent to azure");
 
-    try {
-      this.GPSTable.insert(item);
-    } catch (error) {
-      this.errorHandlerProvider.handleError(error.message, this.page, "saveGPSCoordinates");
-    }
+        // Update list of visited locations for debug
+        let debugIndex = this.stateProvider.visitedLocations.indexOf(coord);
+        if (debugIndex == -1) alert("Yup, this didn't work. -- sendGPSCoordinates");
+        else this.stateProvider.visitedLocations[debugIndex].sentToAzure = true;
+      },
+        error => { this.errorHandlerProvider.handleError(error.message, this.page, "sendGPSCoordinates"); });
+    });
   }
 
   public isNewUser() {
     this.UserTable
       .where({ userId: this.authenticationProvider.userId })
       .read()
+      // TODO bug, this doesn't work as expected - sends data everytime
       // .then(success, failure) -- if there is a user, i.e.: success donothing
       .then(this.doNothing(), this.createReferenceToUserInDB());
   }
