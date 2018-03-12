@@ -38,23 +38,24 @@
 
   <!-- DEBUG MODE -->
   <form style="display:flex; height: 100%; flex-direction: column;" *ngIf="showDebug == true">
-    <ion-list class="title">
-      <img class="logo-img" src="./assets/img/umbrella.png" (click)="toggleDebugMode()">
-    </ion-list>
-    <table *ngIf="stateProvider.visitedLocations.length > 0">
-      <tr>
-        <th>Created</th>
-        <th>Lat</th>
-        <th>Lng</th>
-        <th>Azure</th>
-      </tr>
-      <tr *ngFor="let coord of stateProvider.visitedLocations">
-        <td>{{coord.createdAt}}</td>
-        <td>{{coord.lat}}</td>
-        <td>{{coord.lng}}</td>
-        <td>{{coord.sentToAzure}}</td>
-      </tr>
-    </table>
+    <ion-scroll scrollY=true style="flex: 1 0 0;">
+      <ion-list class="title">
+        <img class="logo-img" src="./assets/img/umbrella.png" (click)="toggleDebugMode()">
+      </ion-list>
+      <table *ngIf="stateProvider.visitedLocations.length > 0">
+        <tr>
+          <th>Created</th>
+          <th>Lat</th>
+          <th>Lng</th>
+          <th>Azure</th>
+        </tr>
+        <tr *ngFor="let coord of stateProvider.visitedLocations">
+          <td>{{coord.createdAt}}</td>
+          <td>{{coord.lat}}</td>
+          <td>{{coord.lng}}</td>
+          <td>{{coord.sentToAzure}}</td>
+        </tr>
+      </table>
     </ion-scroll>
   </form>
 
