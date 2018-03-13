@@ -2,7 +2,7 @@
  * This provider is responsible for connecting the app to Azure
  * 
  * @author Pawel Dworzycki
- * @version 12/03/2018
+ * @version 13/03/2018
  */
 
 // Framework imports
@@ -44,19 +44,21 @@ export class AzureProvider {
   sendGPSCoordinates() {
     this.stateProvider.unsentCoords.forEach(coord => {
       let item = { actual_createdAt: coord.createdAt, latitude: coord.lat, longitude: coord.lng, user_id: this.authenticationProvider.userId };
-      console.log("Trying to send " + coord.lat + ", " + coord.lng + " to Azure");
-      
+      this.stateProvider.addGpsStatus("Sending " + coord.lat + ", " + coord.lng + " to Azure");
+
       this.GPSTable.insert(item).then(success => {
         let index = this.stateProvider.unsentCoords.indexOf(coord);
         this.stateProvider.unsentCoords.splice(index, 1);
-        console.log("sent to azure");
+        this.stateProvider.addGpsStatus(coord.lat + ", " + coord.lng + " sent to Azure");
 
         // Update list of visited locations for debug
         let debugIndex = this.stateProvider.visitedLocations.indexOf(coord);
-        if (debugIndex == -1) alert("Yup, this didn't work. -- sendGPSCoordinates");
-        else this.stateProvider.visitedLocations[debugIndex].sentToAzure = true;
+        this.stateProvider.visitedLocations[debugIndex].sentToAzure = true;
       },
-        error => { this.errorHandlerProvider.handleError(error.message, this.page, "sendGPSCoordinates"); });
+        error => { 
+          this.stateProvider.addGpsStatus("Failed to send " + coord.lat + ", " + coord.lng + " to Azure");
+          this.errorHandlerProvider.handleError(error.message, this.page, "sendGPSCoordinates"); 
+        });
     });
   }
 

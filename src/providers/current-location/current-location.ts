@@ -3,7 +3,7 @@
  * It also calls Google API to get an address for lat and lon co-ordinates.
  * 
  * @author Pawel Dworzycki
- * @version 12/03/2018
+ * @version 13/03/2018
  */
 
 // Framework
@@ -88,9 +88,14 @@ export class CurrentLocationProvider {
           loc.lng = position.coords.longitude;
           loc.createdAt = new Date();
           loc.sentToAzure = false;
+
+          if (this.canSendToAzure())
+            this.stateProvider.addGpsStatus("Found co-ords " + loc.lat + ", " + loc.lng);
+
           this.addVisitedLocation(loc);
         }
         else {
+          this.stateProvider.addGpsStatus("Failed to watch position");
           this.errorHandlerProvider.handleError("position.coords is undefined", this.page, "watchLocation");
         }
       });
@@ -104,17 +109,17 @@ export class CurrentLocationProvider {
     if (this.authenticationProvider.userId == null) throw new Error("USER_NOT_LOGGED_IN");
 
     try {
-      if (this.dateLastGPSCoordsWereSent == null) {
+      if (this.canSendToAzure()) {
+        alert("canSendToAzure");
+        this.stateProvider.addGpsStatus("Added " + loc.lat + ", " + loc.lng + " as a visited location");
         this.sendLocations(loc);
-      }
-      else {
-        // Only send co-ordinates every X minutes
-        let minsSinceLastUpdate = this.genericProvider.howLongSinceDate(this.dateLastGPSCoordsWereSent)[1];
-        if (minsSinceLastUpdate >= this.constantsProvider.howOftenToRecordGPSCoordsMin) {
-          this.sendLocations(loc);
-        }
+      } else {
+        // Only have this notice once
+        if (this.stateProvider.gpsStatus[this.stateProvider.gpsStatus.length - 1] != "Waiting for " + this.constantsProvider.howOftenToRecordGPSCoordsMin + " mins")
+          this.stateProvider.addGpsStatus("Waiting for " + this.constantsProvider.howOftenToRecordGPSCoordsMin + " mins");
       }
     } catch (error) {
+      this.stateProvider.addGpsStatus("Failed to add " + loc.lat + ", " + loc.lng + " as a visited location");
       this.errorHandlerProvider.handleError(error.message, this.page, "addVisitedLocation");
     }
   }
@@ -124,13 +129,30 @@ export class CurrentLocationProvider {
       // Save internally
       this.stateProvider.visitedLocations.push(loc);
       this.stateProvider.unsentCoords.push(loc);
+      this.stateProvider.addGpsStatus("Saved " + loc.lat + ", " + loc.lng + " internally");
       // Push to azure
       this.azureProvider.sendGPSCoordinates();
       // Set date location was updated
       this.dateLastGPSCoordsWereSent = new Date();
     } catch (error) {
+      this.stateProvider.addGpsStatus("Failed to send " + loc.lat + ", " + loc.lng);
       this.errorHandlerProvider.handleError(error.message, this.page, "sendLocations");
     }
+  }
+
+  private canSendToAzure(): boolean {
+    let rtnBool = false;
+
+    if (this.dateLastGPSCoordsWereSent == null) {
+      rtnBool = true;
+    }
+    else {
+      let minsSinceLastUpdate = this.genericProvider.howLongSinceDate(this.dateLastGPSCoordsWereSent)[1];
+      if (minsSinceLastUpdate >= this.constantsProvider.howOftenToRecordGPSCoordsMin)
+        rtnBool = true;
+    }
+
+    return rtnBool;
   }
 
 }

@@ -3,7 +3,7 @@
  * application.
  * 
  * @author Pawel Dworzycki
- * @version 12/03/2018
+ * @version 13/03/2018
  */
 
 // Framework Imports
@@ -28,11 +28,16 @@ export class StateProvider {
   weather: WeatherResponseModel;
   // Offline sync list
   unsentCoords: SimpleLocationModel[];
+  // View
+  gpsStatus: string[];
+  currentGpsStatus: string;
 
   constructor(private androidPermissions: AndroidPermissions, private errorHandlerProvider: ErrorHandlerProvider) {
     this.currentLocation = new GoogleLocationModel();
     this.visitedLocations = new Array<SimpleLocationModel>();
     this.unsentCoords = new Array<SimpleLocationModel>();
+    this.gpsStatus = new Array<string>();
+    this.addGpsStatus("Waiting to collect GPS data");
   }
 
   hasLocationPermission(): boolean {
@@ -46,6 +51,11 @@ export class StateProvider {
 
   requestLocationPermission() {
     this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.ACCESS_FINE_LOCATION);
+  }
+
+  addGpsStatus(status: string) {
+    this.currentGpsStatus = status;
+    this.gpsStatus.push(status);
   }
 
 }

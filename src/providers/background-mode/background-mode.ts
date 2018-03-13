@@ -3,7 +3,7 @@
  * whilst in the background
  * 
  * @author Pawel Dworzycki
- * @version 07/03/2018
+ * @version 13/03/2018
  */
 
 // Framework imports
@@ -37,7 +37,7 @@ export class BackgroundModeProvider {
     });
 
     // Override the back button on Android to go to background instead of closing the app.
-    //this.backgroundMode.overrideBackButton();
+    this.backgroundMode.overrideBackButton();
 
     // Various APIs like playing media or tracking GPS position in background might not work 
     // while in background even the background mode is active. To fix such issues the plugin 
