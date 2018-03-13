@@ -33,9 +33,6 @@
     <div padding>
       <!-- Guidelines for the Google button https://developers.google.com/identity/branding-guidelines -->
       <div class="signinButton googleButton buttons-one" (click)="login()" *ngIf="showLoginButton"></div>
-      <div *ngIf="!showLoginButton">
-        <span id="gpsStatus">{{stateProvider.currentGpsStatus}}</span>
-      </div>
     </div>
   </form>
 
@@ -46,7 +43,8 @@
         <img class="logo-img" src="./assets/img/umbrella.png" (click)="toggleDebugMode()">
       </ion-list>
       <div *ngFor="let status of stateProvider.gpsStatus">
-        <span id="gpsStatus">{{status}}</span><br>
+        <span id="gpsStatus">{{status}}</span>
+        <br>
       </div>
     </ion-scroll>
   </form>

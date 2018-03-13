@@ -30,7 +30,6 @@ export class StateProvider {
   unsentCoords: SimpleLocationModel[];
   // View
   gpsStatus: string[];
-  currentGpsStatus: string;
 
   constructor(private androidPermissions: AndroidPermissions, private errorHandlerProvider: ErrorHandlerProvider) {
     this.currentLocation = new GoogleLocationModel();
@@ -54,7 +53,6 @@ export class StateProvider {
   }
 
   addGpsStatus(status: string) {
-    this.currentGpsStatus = status;
     this.gpsStatus.push(status);
   }
 

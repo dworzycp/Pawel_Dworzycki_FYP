@@ -26,7 +26,7 @@ export class BackgroundModeProvider {
   moveAppToBackground() {
     // On Android have to move the app to the background with this method inorder to 
     // track GPS location 
-    this.backgroundMode.moveToBackground();
+    //this.backgroundMode.moveToBackground();
   }
 
   private optimisations() {
