@@ -110,8 +110,8 @@ export class CurrentLocationProvider {
 
     try {
       if (this.canSendToAzure()) {
-        alert("canSendToAzure");
-        this.stateProvider.addGpsStatus("Added " + loc.lat + ", " + loc.lng + " as a visited location");
+        //alert("canSendToAzure");
+        //this.stateProvider.addGpsStatus("Added " + loc.lat + ", " + loc.lng + " as a visited location");
         this.sendLocations(loc);
       } else {
         // Only have this notice once
@@ -129,7 +129,7 @@ export class CurrentLocationProvider {
       // Save internally
       this.stateProvider.visitedLocations.push(loc);
       this.stateProvider.unsentCoords.push(loc);
-      this.stateProvider.addGpsStatus("Saved " + loc.lat + ", " + loc.lng + " internally");
+      //this.stateProvider.addGpsStatus("Saved " + loc.lat + ", " + loc.lng + " internally");
       // Push to azure
       this.azureProvider.sendGPSCoordinates();
       // Set date location was updated
