@@ -89,6 +89,7 @@
         <variable name="REVERSED_CLIENT_ID" value="com.googleusercontent.apps.975585242877-ska9alkq8ar02kn3jia0vgnjc18ugnv6" />
     </plugin>
     <plugin name="cordova-plugin-android-permissions" spec="^1.0.0" />
+    <plugin name="org.flybuy.cordova.background-location-services" spec="https://github.com/pmwisdom/cordova-background-geolocation-services.git" />
     <engine name="android" spec="6.3.0" />
     <engine name="browser" spec="5.0.3" />
 </widget>

@@ -3,7 +3,7 @@
  * It also calls Google API to get an address for lat and lon co-ordinates.
  * 
  * @author Pawel Dworzycki
- * @version 13/03/2018
+ * @version 15/03/2018
  */
 
 // Framework
@@ -105,7 +105,7 @@ export class CurrentLocationProvider {
     return this.http.get<GoogleLocationModel>(`${this.constantsProvider.googleApiUrl}geocode/json?latlng=${lat},${long}&key=${this.constantsProvider.googleApiKey}`);
   }
 
-  addVisitedLocation(loc: SimpleLocationModel) {
+  public addVisitedLocation(loc: SimpleLocationModel) {
     if (this.authenticationProvider.userId == null) throw new Error("USER_NOT_LOGGED_IN");
 
     try {

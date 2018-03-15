@@ -30,6 +30,7 @@
     "@ionic/storage": "2.1.3",
     "azure-mobile-apps-client": "^2.0.1",
     "cordova-android": "6.3.0",
+    "cordova-background-location-services": "git+https://github.com/pmwisdom/cordova-background-geolocation-services.git",
     "cordova-browser": "5.0.3",
     "cordova-plugin-android-permissions": "^1.0.0",
     "cordova-plugin-background-mode": "^0.7.2",
@@ -67,7 +68,8 @@
       "cordova-plugin-googleplus": {
         "REVERSED_CLIENT_ID": "com.googleusercontent.apps.975585242877-ska9alkq8ar02kn3jia0vgnjc18ugnv6"
       },
-      "cordova-plugin-android-permissions": {}
+      "cordova-plugin-android-permissions": {},
+      "org.flybuy.cordova.background-location-services": {}
     },
     "platforms": [
       "android",
