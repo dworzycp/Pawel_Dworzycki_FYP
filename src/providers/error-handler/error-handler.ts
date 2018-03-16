@@ -2,7 +2,7 @@
  * Provider designed to handle errors
  * 
  * @author Pawel Dworzycki
- * @version 04/03/2018
+ * @version 16/03/2018
  */
 
 // Framework imports
@@ -17,7 +17,9 @@ export class ErrorHandlerProvider {
     // For now just alert the error
     // In the future it might be logged to an online service
     // TODO check if in prod mode, if NOT put more details, if YES make the messages user friendly
-    alert(`${page} :: ${method} :: ${this.traslateErrorString(error)}`);
+    //alert(`${page} :: ${method} :: ${this.traslateErrorString(error)}`);
+    // Since alerts stop execution of code -- DO NOT alert
+    //this.stateProvider.addGpsStatus(`${page} :: ${method} :: ${this.traslateErrorString(error)}`);
   }
 
   private traslateErrorString(error: String): String {

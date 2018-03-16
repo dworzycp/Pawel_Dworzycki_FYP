@@ -2,7 +2,7 @@
  * Main app component
  * 
  * @author Pawel Dworzycki
- * @version 03/03/2018
+ * @version 16/03/2018
  */
 // Framework Imports
 import { Component, ViewChild } from '@angular/core';
@@ -57,13 +57,6 @@ export class MyApp {
 
       // Ask the user for required permissions
       this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.ACCESS_FINE_LOCATION)
-
-      // Enable background mode
-      this.backgroundModeProvider.enableBackgroundMode();
-      // For Android (not sure about iOS) to record GPS data it needs to be pushed
-      // to the background before any GPS co-ords are recorded in the foreground
-      // TODO check if this is to do with how watchPosition is called
-      //this.backgroundModeProvider.moveAppToBackground();
     });
   }
 

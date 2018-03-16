@@ -3,7 +3,7 @@
  * Currently only Google Authentication is supported
  * 
  * @author Pawel Dworzycki
- * @version 12/03/2018
+ * @version 16/03/2018
  */
 // Framework imports
 import { Component } from '@angular/core';
@@ -75,8 +75,6 @@ export class LoginPage {
     // Hide log in button
     this.showLoginButton = false;
     // TODO for now the app will only collect data i.e. no functionality will be available to the user
-    //      i.e. move the app straight to the bg
-    this.backgroundModeProvider.moveAppToBackground();
     // TODO Redirect the user to the home page
     //this.navCtrl.setRoot(HomePage);
   }

@@ -3,7 +3,7 @@
  * application.
  * 
  * @author Pawel Dworzycki
- * @version 13/03/2018
+ * @version 16/03/2018
  */
 
 // Framework Imports
@@ -36,7 +36,7 @@ export class StateProvider {
     this.visitedLocations = new Array<SimpleLocationModel>();
     this.unsentCoords = new Array<SimpleLocationModel>();
     this.gpsStatus = new Array<string>();
-    this.addGpsStatus("Waiting to collect GPS data");
+    this.addGpsStatus("Please move the app to the background to start collecting GPS data");
   }
 
   hasLocationPermission(): boolean {

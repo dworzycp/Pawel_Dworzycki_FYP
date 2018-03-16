@@ -4,7 +4,6 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { HttpClientModule } from '@angular/common/http'; 
 import { HttpModule } from '@angular/http';
 import { Geolocation } from '@ionic-native/geolocation';
-import { BackgroundMode } from '@ionic-native/background-mode';
 import { GooglePlus } from '@ionic-native/google-plus';
 import { AndroidPermissions } from '@ionic-native/android-permissions';
 
@@ -57,7 +56,6 @@ import { AuthenticationProvider } from '../providers/authentication/authenticati
     StateProvider,
     CurrentLocationProvider,
     GenericProvider,
-    BackgroundMode,
     Geolocation,
     ErrorHandlerProvider,
     BackgroundModeProvider,

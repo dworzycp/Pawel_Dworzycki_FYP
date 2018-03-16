@@ -3,7 +3,7 @@
  * It also calls Google API to get an address for lat and lon co-ordinates.
  * 
  * @author Pawel Dworzycki
- * @version 15/03/2018
+ * @version 16/03/2018
  */
 
 // Framework
@@ -46,7 +46,7 @@ export class CurrentLocationProvider {
   // called from here
   public checkIfHasPermission() {
     if (this.stateProvider.hasLocationPermission) {
-      this.watchLocation();
+      this.getCurrentLocation();
     }
     else {
       // Request the permission
@@ -56,49 +56,22 @@ export class CurrentLocationProvider {
     }
   }
 
+  // TODO needed?
   getCurrentLocation(): Promise<any> {
     return new Promise<any>(resolve => {
       var onSuccess = function (position) {
-        // TODO find a better solution
         // For now the lat and long coords are saved in local storage rather than returned due to scope issues
         localStorage.setItem("latitude", position.coords.latitude);
         localStorage.setItem("longitude", position.coords.longitude);
-
         resolve();
       };
-
       // onError Callback receives a PositionError object
       function onError(error) {
         alert(error);
         resolve();
       }
-
       navigator.geolocation.getCurrentPosition(onSuccess, onError);
     });
-  }
-
-  // TODO singleton - this method should never be called more than once
-  watchLocation() {
-    // TODO check for premission here rather than before calling this
-    this.geolocation.watchPosition()
-      .subscribe(position => {
-        if (position.coords !== undefined) {
-          let loc = new SimpleLocationModel();
-          loc.lat = position.coords.latitude;
-          loc.lng = position.coords.longitude;
-          loc.createdAt = new Date();
-          loc.sentToAzure = false;
-
-          if (this.canSendToAzure())
-            this.stateProvider.addGpsStatus("Found co-ords " + loc.lat + ", " + loc.lng);
-
-          this.addVisitedLocation(loc);
-        }
-        else {
-          this.stateProvider.addGpsStatus("Failed to watch position");
-          this.errorHandlerProvider.handleError("position.coords is undefined", this.page, "watchLocation");
-        }
-      });
   }
 
   getReadableLocation(lat: string, long: string): Observable<GoogleLocationModel> {
@@ -110,8 +83,6 @@ export class CurrentLocationProvider {
 
     try {
       if (this.canSendToAzure()) {
-        //alert("canSendToAzure");
-        //this.stateProvider.addGpsStatus("Added " + loc.lat + ", " + loc.lng + " as a visited location");
         this.sendLocations(loc);
       } else {
         // Only have this notice once
@@ -129,7 +100,6 @@ export class CurrentLocationProvider {
       // Save internally
       this.stateProvider.visitedLocations.push(loc);
       this.stateProvider.unsentCoords.push(loc);
-      //this.stateProvider.addGpsStatus("Saved " + loc.lat + ", " + loc.lng + " internally");
       // Push to azure
       this.azureProvider.sendGPSCoordinates();
       // Set date location was updated
