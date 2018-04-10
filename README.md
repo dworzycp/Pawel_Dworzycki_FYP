@@ -19,7 +19,7 @@ The system was developed using an environment with the above versions of require
 ### Cloning
 1. Install the above system dependencies
 2. Using `git clone https://github.com/dworzycp/Pawel_Dworzycki_FYP/` clone the project into a directory of your choice
-3. Move into the clones directory
+3. Move into the cloned directory
 4. Run `npm install` to install project dependencies (not to be confused with system dependencies)
 
 ### Running in a browser
