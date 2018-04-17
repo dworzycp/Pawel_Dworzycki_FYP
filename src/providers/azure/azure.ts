@@ -78,7 +78,7 @@ export class AzureProvider {
 
   public getPredictions() {
     this.PredictionsTable
-      //.where({ UserID: this.authenticationProvider.userId })
+      .where({ UserID: this.authenticationProvider.userId })
       .read()
       .then(success => {
         this.savePredictions(success);
