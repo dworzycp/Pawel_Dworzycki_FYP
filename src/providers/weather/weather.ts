@@ -25,7 +25,6 @@ export class WeatherProvider {
     private constantsProvider: ConstantsProvider) { }
 
   getWeatherForecast(lat: String, long: String, unit: String): Observable<WeatherResponseModel> {
-    // TODO for now units are hard coded to oC (si units)
     return this.http.get<WeatherResponseModel>(`${this.constantsProvider.weatherAPIUrl}${this.constantsProvider.weatherAPIKey}/${lat},${long}?units=${unit}`);
   }
 

@@ -5,6 +5,7 @@ export class WeatherResponseModel {
     currently: CurrentlyModel;
     hourly: HourlyModel;
     displayIcon: string;
+    daily: DailyModel;
 }
 
 class CurrentlyModel {
@@ -26,6 +27,17 @@ class CurrentlyModel {
     cloudCover: number;
     pressure: number;
     ozone: number;
+}
+
+class DailyModel {
+    data: DayModel[];
+}
+
+class DayModel {
+    time: number;
+    icon: string;
+    temperatureHigh: number;
+    displayIcon: string;
 }
 
 class HourlyModel {

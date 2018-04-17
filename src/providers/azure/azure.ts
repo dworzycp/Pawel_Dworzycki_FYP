@@ -11,12 +11,16 @@ import { Injectable } from '@angular/core';
 // Models
 import { SimpleLocationModel } from "../../models/simple-location-model";
 import { JourneyModel } from "../../models/journey-model";
+import { ClusterModel } from '../../models/clutser-model';
+import { PredictionModel } from '../../models/prediction-model';
+import { WeatherResponseModel } from "../../models/weather-response-model";
 
 // Providers
 import { ConstantsProvider } from '../constants/constants';
 import { ErrorHandlerProvider } from '../error-handler/error-handler';
 import { AuthenticationProvider } from "../authentication/authentication";
 import { StateProvider } from "../state/state";
+import { WeatherProvider } from "../weather/weather";
 
 // Azure
 import * as WindowsAzure from 'azure-mobile-apps-client';
@@ -30,18 +34,21 @@ export class AzureProvider {
   private GPSTable: any;        // Reference to the GPS table
   private UserTable: any;       // Reference to the User table
   private PredictionsTable: any;       // Reference to the Predictions table
+  private ClustersTable: any;   // Refernece to the Clusters table
 
   constructor(
     private constantsProvider: ConstantsProvider,
     private errorHandlerProvider: ErrorHandlerProvider,
     private authenticationProvider: AuthenticationProvider,
-    private stateProvider: StateProvider) {
+    private stateProvider: StateProvider,
+    private weatherProvider: WeatherProvider) {
     // Set up connection with Azure DB
     this.client = new WindowsAzure.MobileServiceClient(this.constantsProvider.azureAPIUrl);
     // Set up references to tables
     this.GPSTable = this.client.getTable('GPS_Coords');
     this.UserTable = this.client.getTable('Users');
     this.PredictionsTable = this.client.getTable('Predictions');
+    this.ClustersTable = this.client.getTable('Clusters');
   }
 
   sendGPSCoordinates() {
@@ -76,11 +83,23 @@ export class AzureProvider {
 
   public getPredictions() {
     this.PredictionsTable
-      //.where({ UserID: "114111123049044689311" })
-      .where({ UserID: this.authenticationProvider.userId })
+      .where({ UserID: "114111123049044689311" })
+      //.where({ UserID: this.authenticationProvider.userId })
       .read()
       .then(success => {
         this.savePredictions(success);
+      }, err => {
+        alert(err);
+      });
+  }
+
+  getClusters() {
+    this.ClustersTable
+      .where({ userId: "114111123049044689311" })
+      //.where({ UserID: this.authenticationProvider.userId })
+      .read()
+      .then(success => {
+        this.saveClusters(success);
       }, err => {
         alert(err);
       });
@@ -104,17 +123,67 @@ export class AzureProvider {
   doNothing() { }
 
   savePredictions(predictions) {
+    this.stateProvider.predictions = new PredictionModel;
+
     // Create a prediction model
     predictions.forEach(pred => {
       let prediction = new JourneyModel;
       prediction.userId = pred.UserID;
+      // Origin
       prediction.originClusterName = pred.OriginClusterName;
-      prediction.destClusterName = pred.DestClusterName;
+      prediction.originClusterID = pred.OriginClusterID;
+      prediction.originClutserLat = pred.origin_lat;
+      prediction.originClusterLong = pred.origin_long;
       prediction.leaveTime = pred.LeaveTime;
+      // Dest
+      prediction.destClusterName = pred.DestClusterName;
+      prediction.destClusterID = pred.DestClusterID;
+      prediction.destClutserLat = pred.dest_lat;
+      prediction.destClusterLong = pred.dest_long;
       prediction.enterTime = pred.EnterTime;
       // Add prediction 
       this.stateProvider.predictions.addPredictionForDate(prediction.leaveTime, prediction);
     });
+  }
+
+  saveClusters(clusters) {
+    this.stateProvider.clusters = new Map<number, ClusterModel>();
+
+    clusters.forEach(c => {
+      let cluster = new ClusterModel;
+      cluster.lat = c.c_centre_lat;
+      cluster.long = c.c_centre_long;
+      cluster.name = c.c_label;
+      cluster.id = c.c_id;
+      // Add cluster
+      this.stateProvider.addCluster(cluster);
+    });
+
+    // Foreach clutser, get weather
+    // TODO find a better place for this
+    try {
+      this.stateProvider.clusters.forEach(c => {
+        this.weatherProvider.getWeatherForecast(c.lat, c.long, "si").subscribe(success => {
+          c.weather = new WeatherResponseModel();
+          c.weather = success;
+          // Convert temp from a float to an int
+          c.weather.currently.temperature = parseInt(c.weather.currently.temperature.toString());
+          // Convert icons' string to an icon in the assets folder
+          // TODO should probably be done in the service
+          c.weather.displayIcon = this.weatherProvider.setWeatherIcon(c.weather.currently.icon);
+          c.weather.hourly.data.forEach(hour => {
+            hour.temperature = parseInt(hour.temperature.toString());
+            hour.displayIcon = this.weatherProvider.setWeatherIcon(hour.icon);
+          });
+          c.weather.daily.data.forEach(day => {
+            day.temperatureHigh = parseInt(day.temperatureHigh.toString());
+            day.displayIcon = this.weatherProvider.setWeatherIcon(day.icon);
+          });
+        });
+      });
+    } catch (error) {
+      console.log(error);
+    }
 
   }
 

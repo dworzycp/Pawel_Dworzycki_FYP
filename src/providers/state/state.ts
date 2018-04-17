@@ -18,6 +18,7 @@ import { WeatherResponseModel } from "../../models/weather-response-model";
 import { GoogleLocationModel } from "../../models/google-location-model";
 import { SimpleLocationModel } from '../../models/simple-location-model';
 import { PredictionModel } from "../../models/prediction-model";
+import { ClusterModel } from "../../models/clutser-model";
 
 @Injectable()
 export class StateProvider {
@@ -32,6 +33,7 @@ export class StateProvider {
   // View
   gpsStatus: string[];
   // Predictions
+  clusters: Map<number, ClusterModel>;
   predictions: PredictionModel;
 
   constructor(private androidPermissions: AndroidPermissions, private errorHandlerProvider: ErrorHandlerProvider) {
@@ -40,6 +42,7 @@ export class StateProvider {
     this.unsentCoords = new Array<SimpleLocationModel>();
     this.gpsStatus = new Array<string>();
     this.predictions = new PredictionModel();
+    this.clusters = new Map<number, ClusterModel>();
 
     this.addGpsStatus("Please move the app to the background to start collecting GPS data");
   }
@@ -59,6 +62,10 @@ export class StateProvider {
 
   addGpsStatus(status: string) {
     this.gpsStatus.push(status);
+  }
+
+  addCluster(cluster: ClusterModel) {
+    this.clusters.set(cluster.id, cluster);
   }
 
 }

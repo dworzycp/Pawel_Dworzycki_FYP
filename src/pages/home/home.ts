@@ -41,6 +41,7 @@ export class HomePage {
     // Re-enable swiping menu
     this.menuController.swipeEnable(true);
     // Now that the user is logged in, get predictions
+    this.azureProvider.getClusters();
     this.azureProvider.getPredictions();
   }
 

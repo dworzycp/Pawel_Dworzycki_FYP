@@ -11,7 +11,7 @@ import { DateTime } from "ionic-angular";
 
 export class PredictionModel {
 
-    private days: Map<DayOfWeek, DayPrediction>;
+    days: Map<DayOfWeek, DayPrediction>;
 
     constructor() {
         this.days = new Map<DayOfWeek, DayPrediction>();
@@ -96,6 +96,12 @@ export class DayPrediction {
 
     public getJourneys() {
         return this.journeys;
+    }
+
+    public getWatherForJourneys() {
+        this.journeys.forEach(j => {
+            
+        });
     }
 
 }

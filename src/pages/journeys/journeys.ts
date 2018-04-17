@@ -72,6 +72,17 @@ export class JourneysPage {
 
   getPredictionsForViewingDay() {
     this.predictions = this.stateProvider.predictions.getPredictionsForDayNum(this.viewingDayNum);
+
+    // TODO find a better place of doing this
+    // Get weather for predictions
+    if (this.predictions != null) {
+      this.predictions.getJourneys().forEach(pred => {
+        // Get the cluster this journey blongs to -- TODO should be done in the journey model?
+        let c = this.stateProvider.clusters.get(parseInt(pred.originClusterID.toString()));
+        pred.getWeather(c);
+      });
+    }
+
   }
 
   refresh() {
