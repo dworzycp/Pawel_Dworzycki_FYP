@@ -2,7 +2,7 @@
  * Page responisble for displaying predictions to the user
  * 
  * @author Pawel Dworzycki
- * @version 16/04/2018
+ * @version 17/04/2018
  */
 
 // Framework imports
@@ -13,6 +13,7 @@ import { NavController, NavParams } from 'ionic-angular';
 // Providers
 import { GenericProvider } from "../../providers/generic/generic";
 import { StateProvider } from "../../providers/state/state";
+import { AzureProvider } from '../../providers/azure/azure';
 
 // Models
 import { DayPrediction } from '../../models/prediction-model';
@@ -30,7 +31,12 @@ export class JourneysPage {
 
   predictions: DayPrediction;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private genericProvider: GenericProvider, private stateProvider: StateProvider) {
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    private genericProvider: GenericProvider,
+    private stateProvider: StateProvider,
+    private azureProvider: AzureProvider) {
     this.predictions = null;
     // Set default to today
     this.viewingDayNum = new Date().getDay();
@@ -66,6 +72,10 @@ export class JourneysPage {
 
   getPredictionsForViewingDay() {
     this.predictions = this.stateProvider.predictions.getPredictionsForDayNum(this.viewingDayNum);
+  }
+
+  refresh() {
+    this.azureProvider.getPredictions();
   }
 
 }

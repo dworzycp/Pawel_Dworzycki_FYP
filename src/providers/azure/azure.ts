@@ -42,8 +42,6 @@ export class AzureProvider {
     this.GPSTable = this.client.getTable('GPS_Coords');
     this.UserTable = this.client.getTable('Users');
     this.PredictionsTable = this.client.getTable('Predictions');
-
-    this.getPredictions();
   }
 
   sendGPSCoordinates() {
@@ -78,6 +76,7 @@ export class AzureProvider {
 
   public getPredictions() {
     this.PredictionsTable
+      //.where({ UserID: "114111123049044689311" })
       .where({ UserID: this.authenticationProvider.userId })
       .read()
       .then(success => {

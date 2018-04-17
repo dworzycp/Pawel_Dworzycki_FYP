@@ -31,7 +31,7 @@ export class WeatherProvider {
 
   // As the icons which this appliction is using are not named the same as the string returned from the weather API
   // There is a need to map what is returned to match the icon library (http://adamwhitcroft.com/climacons/)
-  // TO DO extend the icons to consider time of the day as the library provides sun-rise/set icons etc
+  // TODO extend the icons to consider time of the day as the library provides sun-rise/set icons etc
   setWeatherIcon(apiIcon: string): string {
     let iconStr: string;
     switch (apiIcon) {

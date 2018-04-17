@@ -19,6 +19,7 @@ import { CurrentLocationProvider } from "../../providers/current-location/curren
 import { GenericProvider } from "../../providers/generic/generic";
 import { ErrorHandlerProvider } from '../../providers/error-handler/error-handler';
 import { BackgroundModeProvider } from '../../providers/background-mode/background-mode';
+import { AzureProvider } from "../../providers/azure/azure";
 
 @Component({
   selector: 'page-home',
@@ -35,9 +36,12 @@ export class HomePage {
     private weatherProvider: WeatherProvider,
     private currentLocationProvider: CurrentLocationProvider,
     private errorHandlerProvider: ErrorHandlerProvider,
-    private menuController: MenuController) {
+    private menuController: MenuController,
+    private azureProvider: AzureProvider) {
     // Re-enable swiping menu
     this.menuController.swipeEnable(true);
+    // Now that the user is logged in, get predictions
+    this.azureProvider.getPredictions();
   }
 
   ngOnInit() {
