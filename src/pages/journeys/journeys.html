@@ -1,0 +1,61 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title class="text-align-left">{{page}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col col-2>
+        <div class="arrow" (click)="previousDay()">
+          <ion-icon name="arrow-back"></ion-icon>
+        </div>
+      </ion-col>
+      <ion-col col-8 class="viewingDay">
+        <span>{{viewingDay}}</span>
+      </ion-col>
+      <ion-col col-2>
+        <div class="arrow" (click)="nextDay()">
+          <ion-icon name="arrow-forward"></ion-icon>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- HOME ----------- WORK
+       7:30             8:00 -->
+
+  <ion-grid *ngIf="predictions != null">
+    <ion-row *ngFor="let prediction of predictions.getJourneys()">
+      <ion-col col-12>
+        <ion-row>
+          <ion-col class="centre" col-4>{{prediction.originClusterName}}</ion-col>
+          <ion-col class="centre" col-4>
+            <ion-icon name="arrow-forward"></ion-icon>
+          </ion-col>
+          <ion-col class="centre" col-4>{{prediction.destClusterName}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col class="centre" col-4>{{prediction.leaveTime | date:'shortTime'}}</ion-col>
+          <ion-col class="centre" col-4></ion-col>
+          <ion-col class="centre" col-4>{{prediction.enterTime | date:'shortTime'}}</ion-col>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid *ngIf="predictions == null">
+    <ion-row>
+      <ion-col class="centre" col-12>
+        <span>No predictions to show.</span>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

@@ -76,7 +76,7 @@ export class LoginPage {
     this.showLoginButton = false;
     // TODO for now the app will only collect data i.e. no functionality will be available to the user
     // TODO Redirect the user to the home page
-    //this.navCtrl.setRoot(HomePage);
+    this.navCtrl.setRoot(HomePage);
   }
 
   private silentFailed() {

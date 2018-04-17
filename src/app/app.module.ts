@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
-import { HttpClientModule } from '@angular/common/http'; 
+import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 import { Geolocation } from '@ionic-native/geolocation';
 import { GooglePlus } from '@ionic-native/google-plus';
@@ -12,6 +12,7 @@ import { HomePage } from '../pages/home/home';
 import { MapPage } from "../pages/map/map";
 import { LoginPage } from "../pages/login/login";
 import { LoadingSpinner } from "../pages/components/loading-spinner";
+import { JourneysPage } from "../pages/journeys/journeys";
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -31,7 +32,8 @@ import { AuthenticationProvider } from '../providers/authentication/authenticati
     HomePage,
     MapPage,
     LoginPage,
-    LoadingSpinner
+    LoadingSpinner,
+    JourneysPage
   ],
   imports: [
     BrowserModule,
@@ -45,12 +47,13 @@ import { AuthenticationProvider } from '../providers/authentication/authenticati
     HomePage,
     MapPage,
     LoginPage,
-    LoadingSpinner
+    LoadingSpinner,
+    JourneysPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    { provide: ErrorHandler, useClass: IonicErrorHandler },
     WeatherProvider,
     ConstantsProvider,
     StateProvider,
@@ -65,4 +68,4 @@ import { AuthenticationProvider } from '../providers/authentication/authenticati
     AndroidPermissions
   ]
 })
-export class AppModule {}
+export class AppModule { }

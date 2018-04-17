@@ -3,7 +3,7 @@
  * by other classes.
  * 
  * @author Pawel Dworzycki
- * @version 08/12/2017
+ * @version 16/04/2018
  */
 
 // Framework
@@ -70,6 +70,25 @@ export class GenericProvider {
 
     // Return
     return arr;
+  }
+
+  dayNumToString(day: Number): String {
+    switch (day) {
+      case 0:
+        return "Sunday";
+      case 1:
+        return "Monday";
+      case 2:
+        return "Tuesday";
+      case 3:
+        return "Wednesday";
+      case 4:
+        return "Thursday";
+      case 5:
+        return "Friday";
+      case 6:
+        return "Saturday";
+    }
   }
 
 }

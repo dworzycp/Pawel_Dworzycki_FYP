@@ -17,6 +17,7 @@ import { ErrorHandlerProvider } from "../../providers/error-handler/error-handle
 import { WeatherResponseModel } from "../../models/weather-response-model";
 import { GoogleLocationModel } from "../../models/google-location-model";
 import { SimpleLocationModel } from '../../models/simple-location-model';
+import { PredictionModel } from "../../models/prediction-model";
 
 @Injectable()
 export class StateProvider {
@@ -30,12 +31,16 @@ export class StateProvider {
   unsentCoords: SimpleLocationModel[];
   // View
   gpsStatus: string[];
+  // Predictions
+  predictions: PredictionModel;
 
   constructor(private androidPermissions: AndroidPermissions, private errorHandlerProvider: ErrorHandlerProvider) {
     this.currentLocation = new GoogleLocationModel();
     this.visitedLocations = new Array<SimpleLocationModel>();
     this.unsentCoords = new Array<SimpleLocationModel>();
     this.gpsStatus = new Array<string>();
+    this.predictions = new PredictionModel();
+
     this.addGpsStatus("Please move the app to the background to start collecting GPS data");
   }
 

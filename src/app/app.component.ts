@@ -2,7 +2,7 @@
  * Main app component
  * 
  * @author Pawel Dworzycki
- * @version 16/03/2018
+ * @version 16/04/2018
  */
 // Framework Imports
 import { Component, ViewChild } from '@angular/core';
@@ -20,6 +20,7 @@ import { AuthenticationProvider } from "../providers/authentication/authenticati
 import { HomePage } from '../pages/home/home';
 import { MapPage } from "../pages/map/map";
 import { LoginPage } from '../pages/login/login';
+import { JourneysPage } from '../pages/journeys/journeys';
 
 @Component({
   templateUrl: 'app.html'
@@ -27,7 +28,7 @@ import { LoginPage } from '../pages/login/login';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = LoginPage;
+  rootPage: any = HomePage;
 
   pages: Array<{ title: string, component: any, icon: string }>;
 
@@ -44,6 +45,7 @@ export class MyApp {
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'Forecast', component: HomePage, icon: "sunny" },
+      { title: 'Journeys', component: JourneysPage, icon: "compass" },
       { title: 'Map', component: MapPage, icon: "pin" }
     ];
   }
